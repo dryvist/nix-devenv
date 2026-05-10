@@ -68,6 +68,7 @@
           splunk-dev = import ./shells/splunk-dev/default.nix { inherit pkgs; };
           aws = import ./shells/aws/default.nix { inherit pkgs; };
           azure = import ./shells/azure/default.nix { inherit pkgs; };
+          server-admin = import ./shells/server-admin/default.nix { inherit pkgs; };
 
           # devenv shells (Python/AI development)
           ai-dev = devenv.lib.mkShell {
@@ -84,6 +85,9 @@
             inherit inputs pkgs;
             modules = [ ./shells/mlx-server/default.nix ];
           };
+        }
+        // nixpkgs.lib.optionalAttrs (system == "x86_64-linux" || system == "aarch64-linux") {
+          server-admin-linux = import ./shells/server-admin-linux/default.nix { inherit pkgs; };
         }
       );
 

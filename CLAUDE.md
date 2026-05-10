@@ -116,6 +116,8 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 | splunk-dev | Python 3.9 via uv (EOL exception) |
 | aws | awscli2, aws-vault |
 | azure | azure-cli |
+| server-admin | ipmitool, freeipmi (IPMI/SoL); tigervnc; picocom, minicom, tio (serial); dnsmasq (PXE); xorriso, cabextract (ISO/firmware); nmap, tcpdump, mtr, iperf3, wakeonlan; smartmontools; expect, sshpass |
+| server-admin-linux | extends server-admin; adds nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp (Linux only) |
 
 ### devenv (Python/AI)
 
