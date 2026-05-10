@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/JacobPEvans/nix-devenv/compare/v0.5.2...v0.6.0) (2026-05-10)
+
+
+### Features
+
+* **shells:** add server-admin and server-admin-linux dev shells ([#25](https://github.com/JacobPEvans/nix-devenv/issues/25)) ([a9da7bd](https://github.com/JacobPEvans/nix-devenv/commit/a9da7bdddee2a9bc859d420bb6ae3beb9b2420e0))
+
 ## [0.5.2](https://github.com/JacobPEvans/nix-devenv/compare/v0.5.1...v0.5.2) (2026-05-03)
 
 
