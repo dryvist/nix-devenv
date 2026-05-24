@@ -8,6 +8,23 @@
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Inputs consumed by flakeModules.dev-hygiene.
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Pinned to the feat/zizmor-policy branch HEAD until
+    # dryvist/.github#5 merges; flip back to the default branch
+    # afterward.
+    dryvist-github = {
+      url = "github:dryvist/.github/feat/zizmor-policy";
+      flake = false;
+    };
   };
 
   outputs =
@@ -141,6 +158,15 @@
       #       # Per-repo overrides (e.g. treefmt with local wrapper).
       #     };
       lib.mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+
+      # === Flake-parts modules ===
+      #
+      # `dev-hygiene` wires treefmt-nix + git-hooks + zizmor (with the
+      # org-wide policy from dryvist/.github) into a flake-parts consumer
+      # in one import. See flake-modules/dev-hygiene.nix for usage.
+      flakeModules = {
+        dev-hygiene = ./flake-modules/dev-hygiene.nix;
+      };
 
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
