@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/JacobPEvans/nix-devenv/compare/v0.6.0...v0.6.1) (2026-05-24)
+
+
+### Bug Fixes
+
+* **renovate:** use packageRule disable to skip nested shells/ sub-flakes ([#29](https://github.com/JacobPEvans/nix-devenv/issues/29)) ([e83806b](https://github.com/JacobPEvans/nix-devenv/commit/e83806b55162301959cccee0063e8d65a37b7109))
+
 ## [0.6.0](https://github.com/JacobPEvans/nix-devenv/compare/v0.5.2...v0.6.0) (2026-05-10)
 
 
