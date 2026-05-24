@@ -130,6 +130,18 @@
           inherit modules;
         };
 
+      # === Pre-commit hook defaults ===
+      #
+      # Org-wide hook set for cachix/git-hooks.nix consumers. Returns an
+      # attrset suitable for merging into `pre-commit.settings.hooks`:
+      #
+      #   pre-commit.settings.hooks =
+      #     (inputs.nix-devenv.lib.mkPreCommitHooks { inherit pkgs; })
+      #     // {
+      #       # Per-repo overrides (e.g. treefmt with local wrapper).
+      #     };
+      lib.mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
     };
