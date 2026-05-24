@@ -18,11 +18,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Pinned to the feat/zizmor-policy branch HEAD until
-    # dryvist/.github#5 merges; flip back to the default branch
-    # afterward.
+    # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
+    # so this tracks the default branch.
     dryvist-github = {
-      url = "github:dryvist/.github/feat/zizmor-policy";
+      url = "github:dryvist/.github";
       flake = false;
     };
   };

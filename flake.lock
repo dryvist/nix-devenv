@@ -225,16 +225,15 @@
     "dryvist-github": {
       "flake": false,
       "locked": {
-        "lastModified": 1779641196,
+        "lastModified": 1779654703,
         "narHash": "sha256-y8mg05GuFYwFtrHeUtZxKoFFnf1P8hBB7QAYWp+A8LQ=",
         "owner": "dryvist",
         "repo": ".github",
-        "rev": "d033ac9622479497b0c16df1849a8b4cd85d9c1f",
+        "rev": "61f521582ffe3884a603cee263d0a21c08474eca",
         "type": "github"
       },
       "original": {
         "owner": "dryvist",
-        "ref": "feat/zizmor-policy",
         "repo": ".github",
         "type": "github"
       }
