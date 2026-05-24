@@ -164,8 +164,17 @@
       # `dev-hygiene` wires treefmt-nix + git-hooks + zizmor (with the
       # org-wide policy from dryvist/.github) into a flake-parts consumer
       # in one import. See flake-modules/dev-hygiene.nix for usage.
+      #
+      # The module file is called here with nix-devenv's own inputs so
+      # the resulting flake-parts module is pre-bound. Consumers just do
+      # `imports = [ inputs.nix-devenv.flakeModules.dev-hygiene ]` and
+      # get the treefmt + git-hooks wiring without needing those flake
+      # inputs in their own flake.nix.
       flakeModules = {
-        dev-hygiene = ./flake-modules/dev-hygiene.nix;
+        dev-hygiene = import ./flake-modules/dev-hygiene.nix {
+          inherit (inputs) treefmt-nix git-hooks dryvist-github;
+          mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+        };
       };
 
       # Formatter

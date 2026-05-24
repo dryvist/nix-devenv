@@ -21,14 +21,22 @@
 #
 # That's it: no `inputs.treefmt-nix`, no `inputs.git-hooks`, no local
 # treefmt.nix, no .github/zizmor.yml in consumers.
-{ inputs, ... }:
-let
-  mkPreCommitHooks = pkgs: import ../lib/pre-commit-hooks.nix { inherit pkgs; };
-in
+#
+# The file is a function that nix-devenv's flake.nix calls eagerly with
+# its own inputs, returning a flake-parts module. That way the consumer
+# imports a pre-bound module — `inputs.<thing>` references inside this
+# file resolve against nix-devenv's inputs, not the consumer's.
+{
+  treefmt-nix,
+  git-hooks,
+  dryvist-github,
+  mkPreCommitHooks,
+}:
+{ ... }:
 {
   imports = [
-    inputs.treefmt-nix.flakeModule
-    inputs.git-hooks.flakeModule
+    treefmt-nix.flakeModule
+    git-hooks.flakeModule
   ];
 
   perSystem =
@@ -58,22 +66,20 @@ in
         ];
       };
 
-      pre-commit.settings.hooks = (mkPreCommitHooks pkgs) // {
+      pre-commit.settings.hooks = (mkPreCommitHooks { inherit pkgs; }) // {
         treefmt = {
           enable = true;
           package = config.treefmt.build.wrapper;
         };
         # Override the args list to pull the org-wide zizmor policy
         # from dryvist/.github. mkPreCommitHooks defines persona /
-        # severity / confidence; we append --config here. cachix's
-        # git-hooks.nix concatenates pre-commit settings deeply, so an
-        # override at this layer wins.
+        # severity / confidence; --config is appended here.
         zizmor.args = [
           "--persona=regular"
           "--min-severity=medium"
           "--min-confidence=medium"
           "--config"
-          "${inputs.dryvist-github}/zizmor.yml"
+          "${dryvist-github}/zizmor.yml"
         ];
       };
     };
