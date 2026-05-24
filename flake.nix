@@ -8,6 +8,22 @@
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Inputs consumed by flakeModules.dev-hygiene.
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
+    # so this tracks the default branch.
+    dryvist-github = {
+      url = "github:dryvist/.github";
+      flake = false;
+    };
   };
 
   outputs =
@@ -129,6 +145,36 @@
           inherit inputs pkgs;
           inherit modules;
         };
+
+      # === Pre-commit hook defaults ===
+      #
+      # Org-wide hook set for cachix/git-hooks.nix consumers. Returns an
+      # attrset suitable for merging into `pre-commit.settings.hooks`:
+      #
+      #   pre-commit.settings.hooks =
+      #     (inputs.nix-devenv.lib.mkPreCommitHooks { inherit pkgs; })
+      #     // {
+      #       # Per-repo overrides (e.g. treefmt with local wrapper).
+      #     };
+      lib.mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+
+      # === Flake-parts modules ===
+      #
+      # `dev-hygiene` wires treefmt-nix + git-hooks + zizmor (with the
+      # org-wide policy from dryvist/.github) into a flake-parts consumer
+      # in one import. See flake-modules/dev-hygiene.nix for usage.
+      #
+      # The module file is called here with nix-devenv's own inputs so
+      # the resulting flake-parts module is pre-bound. Consumers just do
+      # `imports = [ inputs.nix-devenv.flakeModules.dev-hygiene ]` and
+      # get the treefmt + git-hooks wiring without needing those flake
+      # inputs in their own flake.nix.
+      flakeModules = {
+        dev-hygiene = import ./flake-modules/dev-hygiene.nix {
+          inherit (inputs) treefmt-nix git-hooks dryvist-github;
+          mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+        };
+      };
 
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
