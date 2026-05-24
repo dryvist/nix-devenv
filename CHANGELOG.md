@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/JacobPEvans/nix-devenv/compare/v0.6.1...v0.7.0) (2026-05-24)
+
+
+### Features
+
+* **flakeModules:** mkPreCommitHooks + dev-hygiene module ([#31](https://github.com/JacobPEvans/nix-devenv/issues/31)) ([6831a8b](https://github.com/JacobPEvans/nix-devenv/commit/6831a8bca313bb3ba53b5a5b21f58a96db735314))
+
 ## [0.6.1](https://github.com/JacobPEvans/nix-devenv/compare/v0.6.0...v0.6.1) (2026-05-24)
 
 
