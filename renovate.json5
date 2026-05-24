@@ -7,4 +7,13 @@
   "nix": {
     "enabled": true,
   },
+  "packageRules": [
+    {
+      "description": "Skip nested per-shell flakes — Renovate's lockFileMaintenance times out trying to update 13 shells/*/flake.lock files in one job, leaving the root lock permanently stale. The root flake.lock is the high-value target; sub-shell locks inherit from it and can be refreshed manually. Uses packageRule (not top-level ignorePaths) so the org preset's ignorePaths from JacobPEvans/.github:renovate-presets are preserved (top-level ignorePaths is not mergeable — it would replace the preset list).",
+      "matchFileNames": [
+        "shells/**",
+      ],
+      "enabled": false,
+    },
+  ],
 }
