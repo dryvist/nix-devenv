@@ -121,6 +121,7 @@
       #
       # nix flake init -t github:JacobPEvans/nix-devenv#mkshell
       # nix flake init -t github:JacobPEvans/nix-devenv#devenv
+      # nix flake init -t github:JacobPEvans/nix-devenv#with-hooks
       templates = {
         devenv = {
           path = ./templates/devenv;
@@ -129,6 +130,10 @@
         mkshell = {
           path = ./templates/mkshell;
           description = "Lightweight mkShell for package-list environments";
+        };
+        with-hooks = {
+          path = ./templates/with-hooks;
+          description = "Dev shell wired into org-wide pre-commit profile (flake-parts)";
         };
       };
 
@@ -186,14 +191,25 @@
             inherit (inputs) treefmt-nix git-hooks dryvist-github;
             mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
           };
+          # Materializes nix-store paths to the canonical lint configs in
+          # dryvist/.github at precommit/configs/. terraform and ansible
+          # profiles consume this so consumer repos can delete their
+          # per-repo .tflint.hcl / .ansible-lint / .yamllint.yml copies.
+          sharedConfigs = import ./lib/fetch-shared-configs.nix {
+            inherit (inputs) dryvist-github;
+          };
         in
         {
           inherit dev-hygiene;
           base = dev-hygiene;
           nix = dev-hygiene;
           markdown = dev-hygiene;
-          terraform = import ./flake-modules/profiles/terraform.nix { inherit dev-hygiene; };
-          ansible = import ./flake-modules/profiles/ansible.nix { inherit dev-hygiene; };
+          terraform = import ./flake-modules/profiles/terraform.nix {
+            inherit dev-hygiene sharedConfigs;
+          };
+          ansible = import ./flake-modules/profiles/ansible.nix {
+            inherit dev-hygiene sharedConfigs;
+          };
           python = import ./flake-modules/profiles/python.nix { inherit dev-hygiene; };
         };
 
