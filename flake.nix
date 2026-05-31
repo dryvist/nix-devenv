@@ -164,17 +164,38 @@
       # org-wide policy from dryvist/.github) into a flake-parts consumer
       # in one import. See flake-modules/dev-hygiene.nix for usage.
       #
-      # The module file is called here with nix-devenv's own inputs so
-      # the resulting flake-parts module is pre-bound. Consumers just do
-      # `imports = [ inputs.nix-devenv.flakeModules.dev-hygiene ]` and
-      # get the treefmt + git-hooks wiring without needing those flake
-      # inputs in their own flake.nix.
-      flakeModules = {
-        dev-hygiene = import ./flake-modules/dev-hygiene.nix {
-          inherit (inputs) treefmt-nix git-hooks dryvist-github;
-          mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+      # Profile modules layer language-specific hooks on top of
+      # dev-hygiene. A consumer picks ONE profile import — the profile
+      # transitively pulls in the base wiring, so terraform repos get
+      # the full base hook set plus terraform_format / terraform_validate
+      # / tflint with a single line:
+      #
+      #   imports = [ inputs.nix-devenv.flakeModules.terraform ];
+      #
+      # `base`, `nix`, and `markdown` are aliases for dev-hygiene — the
+      # base wiring already covers nix lints (deadnix, statix) and
+      # markdownlint-cli2 because git-hooks.nix file-glob filtering
+      # makes them inert when the matching file type is absent.
+      #
+      # All module files are called here with nix-devenv's own inputs so
+      # the result is pre-bound. Consumer flakes do not need their own
+      # treefmt-nix / git-hooks inputs.
+      flakeModules =
+        let
+          dev-hygiene = import ./flake-modules/dev-hygiene.nix {
+            inherit (inputs) treefmt-nix git-hooks dryvist-github;
+            mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+          };
+        in
+        {
+          inherit dev-hygiene;
+          base = dev-hygiene;
+          nix = dev-hygiene;
+          markdown = dev-hygiene;
+          terraform = import ./flake-modules/profiles/terraform.nix { inherit dev-hygiene; };
+          ansible = import ./flake-modules/profiles/ansible.nix { inherit dev-hygiene; };
+          python = import ./flake-modules/profiles/python.nix { inherit dev-hygiene; };
         };
-      };
 
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
