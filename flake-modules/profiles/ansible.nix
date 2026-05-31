@@ -5,18 +5,17 @@
 #   imports = [ inputs.nix-devenv.flakeModules.ansible ];
 #
 # Enabled on top of base:
-# * ansible-lint — full ansible-lint pass; reads .ansible-lint from the
-#                  worktree (or repo will fetch the canonical one from
-#                  dryvist/.github/precommit/configs/ once Phase 1b lands)
-# * yamllint     — YAML structure/style check; reads .yamllint or
-#                  .yamllint.yml from the worktree
+# * ansible-lint — full ansible-lint pass; reads canonical config from
+#                  dryvist/.github via sharedConfigs.ansible-lint
+# * yamllint     — YAML structure/style check; reads canonical config from
+#                  dryvist/.github via sharedConfigs.yamllint
 #
-# Both linters expect a config file in the consumer repo today. After
-# Phase 1b lands the canonical configs in dryvist/.github, this profile
-# will be extended to pass `--config <nix-store-path>` automatically and
-# the per-repo files can be deleted.
+# Consumer repos can delete their per-repo `.ansible-lint` and
+# `.yamllint.yml` because both hooks point at the canonical configs in
+# the nix store via the `dryvist-github` flake input.
 {
   dev-hygiene,
+  sharedConfigs,
 }:
 { ... }:
 {
@@ -24,8 +23,14 @@
 
   perSystem = _: {
     pre-commit.settings.hooks = {
-      ansible-lint.enable = true;
-      yamllint.enable = true;
+      ansible-lint = {
+        enable = true;
+        settings.configPath = sharedConfigs.ansible-lint;
+      };
+      yamllint = {
+        enable = true;
+        settings.configPath = sharedConfigs.yamllint;
+      };
     };
   };
 }

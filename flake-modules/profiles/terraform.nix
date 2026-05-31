@@ -9,8 +9,9 @@
 # * terraform-format   — `terraform fmt -recursive` on changed .tf files
 # * terraform-validate — `terraform validate` per module (initializes a
 #                        local backend; safe in pre-commit)
-# * tflint             — Terraform linter; per-repo .tflint.hcl picked up
-#                        from the worktree if present
+# * tflint             — Terraform linter; reads canonical config from
+#                        dryvist/.github via sharedConfigs.tflint, so
+#                        consumer repos can delete their local .tflint.hcl
 #
 # checkov is intentionally not in this profile: only ~3 of the inventoried
 # terraform repos used it, and its run time dominates the hook cycle. Repos
@@ -18,6 +19,7 @@
 # locally.
 {
   dev-hygiene,
+  sharedConfigs,
 }:
 { ... }:
 {
@@ -27,7 +29,13 @@
     pre-commit.settings.hooks = {
       terraform-format.enable = true;
       terraform-validate.enable = true;
-      tflint.enable = true;
+      tflint = {
+        enable = true;
+        args = [
+          "--config"
+          sharedConfigs.tflint
+        ];
+      };
     };
   };
 }
