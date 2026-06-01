@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0](https://github.com/dryvist/nix-devenv/compare/v0.7.0...v0.8.0) (2026-06-01)
+
+
+### Features
+
+* **flakeModules:** fetch shared configs + with-hooks template ([#35](https://github.com/dryvist/nix-devenv/issues/35)) ([eb5b4a3](https://github.com/dryvist/nix-devenv/commit/eb5b4a335349e586dbeaf155a53e577f5b881252))
+* **flakeModules:** terraform/ansible/python profile modules ([#34](https://github.com/dryvist/nix-devenv/issues/34)) ([9896590](https://github.com/dryvist/nix-devenv/commit/9896590313511b1d0090d2642601307f87d174b7))
+
+
+### Bug Fixes
+
+* **ci:** repoint release-please caller to org-native reusable workflow ([#39](https://github.com/dryvist/nix-devenv/issues/39)) ([6aea03e](https://github.com/dryvist/nix-devenv/commit/6aea03e8bd1e45876ce3b0b9adeff1c36d50eef4))
+* **ci:** retarget reusable-workflow uses: refs to current org homes ([#33](https://github.com/dryvist/nix-devenv/issues/33)) ([2dfb5e6](https://github.com/dryvist/nix-devenv/commit/2dfb5e621e1dd654ed0c287a1c1ddaa0c5c9ca8d))
+
 ## [0.7.0](https://github.com/JacobPEvans/nix-devenv/compare/v0.6.1...v0.7.0) (2026-05-24)
 
 
