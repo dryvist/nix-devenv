@@ -4,7 +4,8 @@
 # terraform-validate, tflint) before any consumer repo migrates.
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    channels.url = "path:../../../channels";
+    nixpkgs.follows = "channels/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-devenv.url = "path:../../..";
   };

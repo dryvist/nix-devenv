@@ -2,7 +2,9 @@
   description = "Terraform/Terragrunt infrastructure as code development environment";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    # Channel pinned once in ../../channels; see channels/flake.nix.
+    channels.url = "path:../../channels";
+    nixpkgs.follows = "channels/nixpkgs";
   };
 
   outputs =

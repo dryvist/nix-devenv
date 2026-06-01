@@ -3,7 +3,8 @@
 # Catches drift in git-hooks.nix hook names (ruff, ruff-format, mypy).
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    channels.url = "path:../../../channels";
+    nixpkgs.follows = "channels/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-devenv.url = "path:../../..";
   };

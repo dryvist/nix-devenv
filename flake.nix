@@ -2,7 +2,9 @@
   description = "Reusable dev shells in Nix — Terraform, Ansible, Kubernetes, AI/ML, and more";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    # Channel pinned once in ./channels; see channels/flake.nix.
+    channels.url = "path:./channels";
+    nixpkgs.follows = "channels/nixpkgs";
 
     devenv = {
       url = "github:cachix/devenv";
@@ -46,6 +48,8 @@
       # === Pre-built shells ===
       #
       # Convenience re-exports using the root flake.lock.
+      # The nixpkgs channel is pinned once in channels/flake.nix; this flake
+      # and every shell follow it via channels.url + nixpkgs.follows.
       # For isolated locks, use ?dir= pattern instead:
       #   nix develop github:JacobPEvans/nix-devenv?dir=shells/terraform
       devShells = forAllSystems (
