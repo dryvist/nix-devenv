@@ -1,19 +1,5 @@
 {
   "nodes": {
-    "channels": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "path": "../../channels",
-        "type": "path"
-      },
-      "original": {
-        "path": "../../channels",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1780180721,
@@ -32,11 +18,7 @@
     },
     "root": {
       "inputs": {
-        "channels": "channels",
-        "nixpkgs": [
-          "channels",
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       }
     }
   },

@@ -2,7 +2,9 @@
   description = "Skill orchestration: LangGraph, LlamaIndex, embeddings";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    # Channel pinned once in ../../channels; see channels/flake.nix.
+    channels.url = "path:../../channels";
+    nixpkgs.follows = "channels/nixpkgs";
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";

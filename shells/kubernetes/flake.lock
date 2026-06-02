@@ -1,24 +1,42 @@
 {
   "nodes": {
+    "channels": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "path": "../../channels",
+        "type": "path"
+      },
+      "original": {
+        "path": "../../channels",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1774818300,
-        "narHash": "sha256-4eRB7XOFBxQ/tUUFPjz7UU2/zt1dtTiVP96X9BNWdeI=",
+        "lastModified": 1780180721,
+        "narHash": "sha256-bHHvsVgzvOE0SKJn2OB7LDKuiOpdkXS/eVqTiJDNVBI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "fb0b20238291625260547f4ce9f5540aff156fd5",
+        "rev": "9396caa0b59af6a17cac62008a72255b25e1e9a8",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-25.11-darwin",
+        "ref": "nixpkgs-26.05-darwin",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "channels": "channels",
+        "nixpkgs": [
+          "channels",
+          "nixpkgs"
+        ]
       }
     }
   },
