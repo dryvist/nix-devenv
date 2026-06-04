@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/dryvist/nix-devenv/compare/v0.8.1...v0.9.0) (2026-06-04)
+
+
+### Features
+
+* **shells:** add windows dev shell (PowerShell) ([#44](https://github.com/dryvist/nix-devenv/issues/44)) ([86d0df5](https://github.com/dryvist/nix-devenv/commit/86d0df5fc8edcd8033a93eb0eef131a84efbcbca))
+
 ## [0.8.1](https://github.com/dryvist/nix-devenv/compare/v0.8.0...v0.8.1) (2026-06-04)
 
 
