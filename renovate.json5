@@ -7,13 +7,13 @@
   "nix": {
     "enabled": true,
   },
-  "packageRules": [
-    {
-      "description": "Skip nested per-shell flakes — Renovate's lockFileMaintenance times out trying to update 13 shells/*/flake.lock files in one job, leaving the root lock permanently stale. The root flake.lock is the high-value target; sub-shell locks inherit from it and can be refreshed manually. Uses packageRule (not top-level ignorePaths) so the org preset's ignorePaths from JacobPEvans/.github:renovate-presets are preserved (top-level ignorePaths is not mergeable — it would replace the preset list).",
-      "matchFileNames": [
-        "shells/**",
-      ],
-      "enabled": false,
-    },
-  ],
+  // Per-shell flakes are intentionally LEFT enabled. The earlier shells/**
+  // disable (#29) existed because each shell pinned its own nixpkgs input, so
+  // lockFileMaintenance had to update 13 independent nixpkgs locks in one job
+  // and timed out. #40 centralized the channel: every shell now
+  // `nixpkgs.follows = "channels/nixpkgs"`, so there is a single shared nixpkgs
+  // and the per-shell locks are cheap to refresh. Disabling them only caused
+  // the shells to silently drift behind the channel (e.g. OpenTofu lagging a
+  // consumer's CI). Renovate must keep shells/*/flake.lock in sync with the
+  // channel, so no shells/** override here.
 }
