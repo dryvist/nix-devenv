@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/dryvist/nix-devenv/compare/v0.8.0...v0.8.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* **renovate:** re-enable shells/*/flake.lock maintenance ([#42](https://github.com/dryvist/nix-devenv/issues/42)) ([ee3f122](https://github.com/dryvist/nix-devenv/commit/ee3f1224d9ee2680c242b6256f175d0bc4f11e95))
+
 ## [0.8.0](https://github.com/dryvist/nix-devenv/compare/v0.7.0...v0.8.0) (2026-06-01)
 
 
