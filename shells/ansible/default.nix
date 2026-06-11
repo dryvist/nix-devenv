@@ -28,6 +28,7 @@ pkgs.mkShell {
           jsondiff
           pyyaml
           jinja2
+          boto3 # amazon.aws collection (S3 inventory resolvers) — propagates botocore
         ])
         ++ (extraPythonPackages ps)
       ))
