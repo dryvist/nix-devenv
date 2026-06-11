@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/dryvist/nix-devenv/compare/v0.9.0...v0.10.0) (2026-06-11)
+
+
+### Features
+
+* **ansible:** add boto3 to the ansible shell python env ([#46](https://github.com/dryvist/nix-devenv/issues/46)) ([debdbf4](https://github.com/dryvist/nix-devenv/commit/debdbf41c88f0fcb283a66c2d1d1bb6298e746be))
+
 ## [0.9.0](https://github.com/dryvist/nix-devenv/compare/v0.8.1...v0.9.0) (2026-06-04)
 
 
