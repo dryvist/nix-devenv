@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/dryvist/nix-devenv/compare/v0.10.0...v0.10.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* **ci:** repoint shared osv-scan workflow to dryvist hub ([#48](https://github.com/dryvist/nix-devenv/issues/48)) ([411d23c](https://github.com/dryvist/nix-devenv/commit/411d23c50082232bcd40a888543e3de6e8ac310c))
+
 ## [0.10.0](https://github.com/dryvist/nix-devenv/compare/v0.9.0...v0.10.0) (2026-06-11)
 
 
