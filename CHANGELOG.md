@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/dryvist/nix-devenv/compare/v0.10.1...v0.11.0) (2026-06-13)
+
+
+### Features
+
+* **ansible-shell:** add boto3/botocore so the native amazon.aws S3 inventory path works ([#50](https://github.com/dryvist/nix-devenv/issues/50)) ([b16f5cd](https://github.com/dryvist/nix-devenv/commit/b16f5cd470bd21f4a80fa3a9e0c0a731d9fe0357))
+
 ## [0.10.1](https://github.com/dryvist/nix-devenv/compare/v0.10.0...v0.10.1) (2026-06-12)
 
 
