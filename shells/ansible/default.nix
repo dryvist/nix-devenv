@@ -28,7 +28,11 @@ pkgs.mkShell {
           jsondiff
           pyyaml
           jinja2
-          boto3 # amazon.aws collection (S3 inventory resolvers) — propagates botocore
+          # amazon.aws collection (S3 inventory resolvers). botocore is
+          # listed explicitly — not left to boto3's propagation — so the
+          # native amazon.aws S3 path keeps working if that ever changes.
+          boto3
+          botocore
         ])
         ++ (extraPythonPackages ps)
       ))
