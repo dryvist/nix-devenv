@@ -7,9 +7,11 @@
 #
 # Picks ONE profile from nix-devenv's flakeModules. Profiles available:
 #
-#   base       — file hygiene + markdownlint + zizmor (default)
+#   base       — file hygiene + markdownlint + zizmor + treefmt (default)
 #   nix        — alias for base; covers deadnix/statix via file-glob
 #   markdown   — alias for base
+#   docs       — Markdown/MDX docs: hygiene-core + markdownlint (.md/.mdx),
+#                NO treefmt/prettier (won't reformat authored prose)
 #   terraform  — base + terraform-format/validate + tflint
 #   ansible    — base + ansible-lint + yamllint (canonical configs from dryvist/.github)
 #   python     — base + ruff + ruff-format + mypy

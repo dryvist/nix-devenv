@@ -187,14 +187,23 @@
       # markdownlint-cli2 because git-hooks.nix file-glob filtering
       # makes them inert when the matching file type is absent.
       #
+      # `docs` is the dedicated Markdown/MDX profile: it inherits
+      # `hygiene-core` (the universal hook set) directly and skips treefmt,
+      # so prettier never reformats hand-authored prose. `dev-hygiene` =
+      # `hygiene-core` + treefmt, so every existing consumer is unchanged.
+      #
       # All module files are called here with nix-devenv's own inputs so
       # the result is pre-bound. Consumer flakes do not need their own
       # treefmt-nix / git-hooks inputs.
       flakeModules =
         let
-          dev-hygiene = import ./flake-modules/dev-hygiene.nix {
-            inherit (inputs) treefmt-nix git-hooks dryvist-github;
+          hygiene-core = import ./flake-modules/hygiene-core.nix {
+            inherit (inputs) git-hooks dryvist-github;
             mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+          };
+          dev-hygiene = import ./flake-modules/dev-hygiene.nix {
+            inherit (inputs) treefmt-nix;
+            inherit hygiene-core;
           };
           # Materializes nix-store paths to the canonical lint configs in
           # dryvist/.github at precommit/configs/. terraform and ansible
@@ -205,10 +214,11 @@
           };
         in
         {
-          inherit dev-hygiene;
+          inherit dev-hygiene hygiene-core;
           base = dev-hygiene;
           nix = dev-hygiene;
           markdown = dev-hygiene;
+          docs = import ./flake-modules/profiles/docs.nix { inherit hygiene-core; };
           terraform = import ./flake-modules/profiles/terraform.nix {
             inherit dev-hygiene sharedConfigs;
           };
