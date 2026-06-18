@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/dryvist/nix-devenv/compare/v0.11.0...v0.12.0) (2026-06-18)
+
+
+### Features
+
+* **hooks:** add docs profile via hygiene-core grandparent split ([#52](https://github.com/dryvist/nix-devenv/issues/52)) ([8b07c91](https://github.com/dryvist/nix-devenv/commit/8b07c91ae305b9f34f92fe408ef0862c00df7e0c))
+
 ## [0.11.0](https://github.com/dryvist/nix-devenv/compare/v0.10.1...v0.11.0) (2026-06-13)
 
 
