@@ -32,17 +32,27 @@
   perSystem =
     { pkgs, ... }:
     {
-      pre-commit.settings.hooks = (mkPreCommitHooks { inherit pkgs; }) // {
-        # Override the args list to pull the org-wide zizmor policy
-        # from dryvist/.github. mkPreCommitHooks defines persona /
-        # severity / confidence; --config is appended here.
-        zizmor.args = [
-          "--persona=regular"
-          "--min-severity=medium"
-          "--min-confidence=medium"
-          "--config"
-          "${dryvist-github}/zizmor.yml"
-        ];
-      };
+      pre-commit.settings.hooks =
+        let
+          hooks = mkPreCommitHooks { inherit pkgs; };
+        in
+        hooks
+        // {
+          # Append the org-wide zizmor policy from dryvist/.github to the
+          # args mkPreCommitHooks already defines (persona / severity /
+          # confidence). `//` is a SHALLOW merge, so the zizmor attrset must
+          # be merged explicitly — `zizmor.args = […]` alone would replace
+          # the whole hook and drop its `enable` / `files`, leaving zizmor
+          # inert.
+          zizmor = hooks.zizmor // {
+            args = [
+              "--persona=regular"
+              "--min-severity=medium"
+              "--min-confidence=medium"
+              "--config"
+              "${dryvist-github}/zizmor.yml"
+            ];
+          };
+        };
     };
 }
