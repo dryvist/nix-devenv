@@ -5,7 +5,10 @@
 #
 # NOTE: pyright is NOT included here — it stays in nix-home global env so that
 # IDEs (Cursor/VSCode) can find it in PATH for background linting without
-# requiring a specific devenv to be active.
+# requiring a specific devenv to be active. Type-checking for the org standard
+# is provided by that global pyright + the `flakeModules.python` pre-commit
+# profile, not by this devshell. (mypy was dropped 2026-06 when the org
+# standard moved to pyright — nothing here ran it any longer.)
 #
 # Usage in a consumer devenv.nix:
 #   { inputs, pkgs, ... }:
@@ -20,7 +23,6 @@
 {
   packages = with pkgs; [
     ruff # Fast Python linter and formatter (replaces flake8, isort, black)
-    mypy # Static type checker for Python
     uv # Fast Python package manager (replaces pip/pipx)
   ];
 }
