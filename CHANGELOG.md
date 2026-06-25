@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/dryvist/nix-devenv/compare/v0.12.0...v0.13.0) (2026-06-25)
+
+
+### Features
+
+* **python:** mandate pyright + pytest, drop mypy (org standard sync) ([#56](https://github.com/dryvist/nix-devenv/issues/56)) ([5c54737](https://github.com/dryvist/nix-devenv/commit/5c54737adc1a1f7582c3a32a157b82e200b8d578))
+
 ## [0.12.0](https://github.com/dryvist/nix-devenv/compare/v0.11.0...v0.12.0) (2026-06-18)
 
 
