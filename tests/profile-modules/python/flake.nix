@@ -1,6 +1,9 @@
 # Smoke-test consumer for nix-devenv's flakeModules.python profile.
 # Validation: `cd tests/profile-modules/python && nix flake check`.
-# Catches drift in git-hooks.nix hook names (ruff, ruff-format, mypy).
+# Catches drift in git-hooks.nix hook names (ruff, ruff-format, pyright) plus
+# the custom pre-push pytest hook. (No .py files here, so pyright matches
+# nothing and pytest is pre-push-gated — the check validates evaluation, not
+# hook execution.)
 {
   inputs = {
     channels.url = "path:../../../channels";
