@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/dryvist/nix-devenv/compare/v0.13.0...v0.14.0) (2026-07-01)
+
+
+### Features
+
+* **azure:** add azcopy to the azure dev shell ([#58](https://github.com/dryvist/nix-devenv/issues/58)) ([32c6034](https://github.com/dryvist/nix-devenv/commit/32c6034ef8690b960d1532d14405f82813ef2601))
+
 ## [0.13.0](https://github.com/dryvist/nix-devenv/compare/v0.12.0...v0.13.0) (2026-06-25)
 
 
