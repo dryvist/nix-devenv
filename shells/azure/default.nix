@@ -7,8 +7,8 @@ pkgs.mkShell {
   shellHook = ''
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "Azure Cloud Shell"
-      echo "  - az: $(az version --output tsv 2>/dev/null | head -1)"
-      echo "  - azcopy: $(azcopy --version 2>/dev/null | head -1)"
+      echo "  - az: $(az version --output tsv 2>/dev/null | head -n 1)"
+      echo "  - azcopy: $(azcopy --version 2>/dev/null | head -n 1)"
       echo ""
     fi
   '';
