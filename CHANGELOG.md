@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/dryvist/nix-devenv/compare/v0.14.0...v0.15.0) (2026-07-03)
+
+
+### Features
+
+* **ansible-apps:** add hvac python dep for community.hashi_vault ([#60](https://github.com/dryvist/nix-devenv/issues/60)) ([7ed499e](https://github.com/dryvist/nix-devenv/commit/7ed499eba1910e5176698489caf081d8f379e7bc))
+
 ## [0.14.0](https://github.com/dryvist/nix-devenv/compare/v0.13.0...v0.14.0) (2026-07-01)
 
 
