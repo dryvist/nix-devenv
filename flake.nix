@@ -79,6 +79,7 @@
             extraPythonPackages = ps: [
               ps.docker
               ps.httplib2
+              ps.hvac # community.hashi_vault (openbao_secrets role)
             ];
           };
           terraform = import ./shells/terraform/default.nix { pkgs = pkgsUnfree; };
