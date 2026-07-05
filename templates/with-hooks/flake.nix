@@ -21,7 +21,7 @@
   description = "Development environment with org-wide pre-commit hooks";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-devenv = {
       url = "github:dryvist/nix-devenv";
