@@ -1,19 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "local>dryvist/.github",
-  ],
-  "nix": {
-    "enabled": true,
-  },
-  // Per-shell flakes are intentionally LEFT enabled. The earlier shells/**
-  // disable (#29) existed because each shell pinned its own nixpkgs input, so
-  // lockFileMaintenance had to update 13 independent nixpkgs locks in one job
-  // and timed out. #40 centralized the channel: every shell now
-  // `nixpkgs.follows = "channels/nixpkgs"`, so there is a single shared nixpkgs
-  // and the per-shell locks are cheap to refresh. Disabling them only caused
-  // the shells to silently drift behind the channel (e.g. OpenTofu lagging a
-  // consumer's CI). Renovate must keep shells/*/flake.lock in sync with the
-  // channel, so no shells/** override here.
+  "extends": ["local>dryvist/.github:renovate-nix"]
 }
