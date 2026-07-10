@@ -13,7 +13,7 @@ from module-exporting repos (nix-ai, nix-home, nix-darwin).
 ### Four-Repo Boundary
 
 | Repo | Purpose | Imports nix-devenv? |
-|------|---------|-------------------|
+| ------ | --------- | ------------------- |
 | nix-darwin | macOS system config | Never |
 | nix-home | User dev environment | Never |
 | nix-ai | AI coding tools | Never |
@@ -25,7 +25,7 @@ for zero lock impact.
 ### mkShell vs devenv
 
 | Use mkShell when | Use devenv when |
-|-----------------|-----------------|
+| ----------------- | ----------------- |
 | Shell is just a package list | Need declarative services (databases, queues) |
 | Used in CI where deps must be minimal | Need language-specific tooling (Python venvs, uv) |
 | No services or background processes | Need process management |
@@ -107,7 +107,7 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 ### mkShell (infrastructure)
 
 | Shell | Description |
-|-------|-------------|
+| ------- | ------------- |
 | ansible | Ansible, ansible-lint, molecule, sops, age |
 | terraform | Terraform, terragrunt, opentofu, tflint, tfsec, trivy (composes aws shell) |
 | kubernetes | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
@@ -117,13 +117,17 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 | aws | awscli2, aws-vault |
 | azure | azure-cli |
 | windows | powershell (pwsh) — cross-platform PowerShell 7 for Windows automation and .ps1 scripting |
-| server-admin | ipmitool, freeipmi (IPMI/SoL); tigervnc; picocom, minicom, tio (serial); dnsmasq (PXE); xorriso, cabextract (ISO/firmware); nmap, tcpdump, mtr, iperf3, wakeonlan; smartmontools; expect, sshpass |
+| server-admin | out-of-band + bare-metal admin (IPMI/SoL, serial, PXE, ISO, net-diag, SMART) — packages below |
 | server-admin-linux | extends server-admin; adds nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp (Linux only) |
+
+`server-admin` packages: ipmitool, freeipmi; tigervnc; picocom, minicom, tio;
+dnsmasq; xorriso, cabextract; nmap, tcpdump, mtr, iperf3, wakeonlan;
+smartmontools; expect, sshpass.
 
 ### devenv (Python/AI)
 
 | Shell | Description |
-|-------|-------------|
+| ------- | ------------- |
 | ai-dev | LangChain, LangGraph, OpenTelemetry (pip venv) |
 | orchestrator | LangGraph orchestration (uv + pyproject.toml) |
 | mlx-server | MLX inference (aarch64-darwin only, uv) |
@@ -131,7 +135,7 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 ## Reusable Modules
 
 | Module | Description |
-|--------|-------------|
+| ------ | ----------- |
 | `devenvModules.python-ai` | Python + LangChain + OTel (venv) |
 | `devenvModules.python-ml` | Python + uv sync |
 
@@ -178,7 +182,7 @@ nix.settings = {
 ## Part of the Nix Ecosystem
 
 | Repo | Purpose |
-|------|---------|
+| ------ | --------- |
 | [nix-darwin](https://github.com/JacobPEvans/nix-darwin) | macOS system config |
 | [nix-home](https://github.com/JacobPEvans/nix-home) | User dev environment |
 | [nix-ai](https://github.com/JacobPEvans/nix-ai) | AI coding tools |
