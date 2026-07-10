@@ -7,35 +7,42 @@
   extraPackages ? [ ],
   extraPythonPackages ? (_: [ ]),
 }:
+let
+  # One python env carrying ansible AND its library deps. Ansible executes
+  # implicit-localhost modules with its own sys.executable — a separate
+  # python3.withPackages env on PATH is invisible to those tasks, so
+  # amazon.aws (S3 inventory resolvers) silently loses boto3 unless the
+  # interpreter that runs ansible itself can import it.
+  ansiblePython = pkgs.python3.withPackages (
+    ps:
+    (with ps; [
+      ansible # full package: bundles community collections (amazon.aws etc.)
+      paramiko
+      jsondiff
+      pyyaml
+      jinja2
+      # botocore is listed explicitly — not left to boto3's propagation — so
+      # the native amazon.aws S3 path keeps working if that ever changes.
+      boto3
+      botocore
+    ])
+    ++ (extraPythonPackages ps)
+  );
+in
 pkgs.mkShell {
   buildInputs =
     with pkgs;
     [
       # === Configuration Management ===
-      ansible
+      # ansible-playbook/ansible come from ansiblePython (via ansible-core
+      # propagation) so localhost tasks run on the boto3-capable interpreter.
+      ansiblePython
       ansible-lint
       molecule
 
       # === Secrets Management ===
       sops
       age
-
-      # === Python (Ansible dependencies) ===
-      (python3.withPackages (
-        ps:
-        (with ps; [
-          paramiko
-          jsondiff
-          pyyaml
-          jinja2
-          # amazon.aws collection (S3 inventory resolvers). botocore is
-          # listed explicitly — not left to boto3's propagation — so the
-          # native amazon.aws S3 path keeps working if that ever changes.
-          boto3
-          botocore
-        ])
-        ++ (extraPythonPackages ps)
-      ))
 
       # === Testing ===
       bats # Bash Automated Testing System — moved from nix-home global env (project-scoped tool)
