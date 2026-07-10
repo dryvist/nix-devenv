@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/dryvist/nix-devenv/compare/v0.15.0...v0.15.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* **shells/ansible:** run ansible on the boto3-capable python env ([12ed57f](https://github.com/dryvist/nix-devenv/commit/12ed57fc95977c5c47b122b07e2bc6bf63b9d377))
+
 ## [0.15.0](https://github.com/dryvist/nix-devenv/compare/v0.14.0...v0.15.0) (2026-07-03)
 
 
