@@ -1,7 +1,7 @@
-# Terraform/Terragrunt Infrastructure as Code Shell
+# OpenTofu Infrastructure as Code Shell
 #
-# Complete IaC environment with Terraform, Terragrunt, security scanners,
-# and AWS/Docker integration.
+# Local authoring and validation tools for OpenTofu configurations executed by
+# Terrakube. Terrakube obtains runtime credentials directly from OpenBao.
 #
 # NOTE: Caller must pass pkgs with config.allowUnfree = true for Terraform's BSL license.
 { pkgs }:
@@ -13,7 +13,6 @@ pkgs.mkShell {
   buildInputs = with pkgs; [
     # === Infrastructure as Code ===
     terraform
-    terragrunt
     opentofu
     terraform-docs
     tflint
@@ -44,12 +43,11 @@ pkgs.mkShell {
   shellHook = ''
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "═══════════════════════════════════════════════════════════════"
-      echo "Terraform/Terragrunt Infrastructure as Code Environment"
+      echo "OpenTofu Infrastructure as Code Environment"
       echo "═══════════════════════════════════════════════════════════════"
       echo ""
       echo "Infrastructure as Code:"
       echo "  - terraform: $(terraform version -json 2>/dev/null | jq -r '.terraform_version' 2>/dev/null || terraform version | head -1)"
-      echo "  - terragrunt: $(terragrunt --version 2>/dev/null | cut -d' ' -f3)"
       echo "  - opentofu: $(tofu version 2>/dev/null | head -1)"
       echo ""
       echo "Security & Compliance:"
@@ -63,9 +61,9 @@ pkgs.mkShell {
       echo "  - aws-cli: $(aws --version 2>/dev/null)"
       echo ""
       echo "Getting Started:"
-      echo "  1. Configure AWS credentials: aws configure"
-      echo "  2. Configure Proxmox API token (environment variable or file)"
-      echo "  3. Initialize Terraform: terragrunt init"
+      echo "  1. Author and validate locally with OpenTofu"
+      echo "  2. Run plans and applies in Terrakube"
+      echo "  3. Let Terrakube inject short-lived credentials from OpenBao"
       echo "  4. Setup pre-commit hooks: pre-commit install"
       echo ""
     fi

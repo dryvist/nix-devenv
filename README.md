@@ -87,7 +87,7 @@ outputs = { nix-devenv, nixpkgs, ... }: {
 | Shell | Tooling |
 | --- | --- |
 | `ansible` | ansible, ansible-lint, molecule, sops, age |
-| `terraform` | terraform, terragrunt, opentofu, tflint, tfsec, trivy |
+| `terraform` | terraform, opentofu, tflint, tfsec, trivy; local checks for Terrakube workspaces |
 | `kubernetes` | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
 | `containers` | docker, buildkit, crane, skopeo |
 | `typescript` | nodejs 22 LTS, pnpm, typescript, ts-language-server, biome |
