@@ -1,5 +1,5 @@
 {
-  description = "Terraform/Terragrunt infrastructure as code development environment";
+  description = "OpenTofu infrastructure as code development environment";
 
   inputs = {
     # Channel pinned once in ../../channels; see channels/flake.nix.
