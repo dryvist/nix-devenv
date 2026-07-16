@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.2](https://github.com/dryvist/nix-devenv/compare/v0.15.1...v0.15.2) (2026-07-16)
+
+
+### Bug Fixes
+
+* restore shells/terraform as deprecated alias of shells/tofu ([#75](https://github.com/dryvist/nix-devenv/issues/75)) ([6dbc47a](https://github.com/dryvist/nix-devenv/commit/6dbc47a95c00e75838fbf79cdf75e42e53920939))
+
 ## [0.15.1](https://github.com/dryvist/nix-devenv/compare/v0.15.0...v0.15.1) (2026-07-10)
 
 
