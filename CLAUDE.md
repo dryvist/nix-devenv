@@ -41,7 +41,7 @@ Consumers select a specific shell's lock using Nix's `?dir=` parameter:
 
 ```bash
 # mkShell shell — ~2 node lock (just nixpkgs)
-nix develop github:JacobPEvans/nix-devenv?dir=shells/terraform
+nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
 
 # devenv shell — ~28 node lock (nixpkgs + devenv tree)
 nix develop github:JacobPEvans/nix-devenv?dir=shells/ai-dev
@@ -54,7 +54,7 @@ This means mkShell consumers never pay for devenv's dependency tree.
 ### Pattern A — Direct use with isolated lock (preferred)
 
 ```bash
-nix develop github:JacobPEvans/nix-devenv?dir=shells/terraform
+nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
 ```
 
 Each shell resolves against its OWN flake.lock. No bloat leakage.
@@ -71,7 +71,7 @@ direnv activates the remote shell with its own lock. No local flake.nix needed.
 ### Pattern C — Root flake (convenience)
 
 ```bash
-nix develop github:JacobPEvans/nix-devenv#terraform
+nix develop github:JacobPEvans/nix-devenv#tofu
 ```
 
 Uses the root flake.lock (larger — carries devenv). Fine for quick one-off use.
@@ -109,7 +109,7 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 | Shell | Description |
 | ------- | ------------- |
 | ansible | Ansible, ansible-lint, molecule, sops, age |
-| terraform | Terraform, OpenTofu, tflint, tfsec, trivy; local checks for Terrakube workspaces (composes aws shell) |
+| tofu | Terraform, OpenTofu, tflint, tfsec, trivy; local checks for Terrakube workspaces (composes aws shell) |
 | kubernetes | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
 | containers | docker, buildkit, crane, skopeo |
 | typescript | nodejs 22 LTS, pnpm, typescript, typescript-language-server, biome (formatter/linter/LSP) |
@@ -152,7 +152,7 @@ smartmontools; expect, sshpass.
 
 ```bash
 # Update a single shell's lock
-cd shells/terraform && nix flake update
+cd shells/tofu && nix flake update
 
 # Update root lock (affects Pattern C consumers)
 nix flake update

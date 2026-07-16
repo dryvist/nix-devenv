@@ -29,7 +29,7 @@ No install step of its own — consume a shell directly by flake reference:
 
 ```bash
 # Enter the Terraform shell with its own minimal lock (~2 nodes: just nixpkgs)
-nix develop github:dryvist/nix-devenv?dir=shells/terraform
+nix develop github:dryvist/nix-devenv?dir=shells/tofu
 ```
 
 The `?dir=<shell>` selector resolves against **that shell's** `flake.lock`, so
@@ -41,14 +41,14 @@ The `?dir=<shell>` selector resolves against **that shell's** `flake.lock`, so
 
 ```bash
 # A: Direct use with an isolated lock (preferred)
-nix develop github:dryvist/nix-devenv?dir=shells/terraform
+nix develop github:dryvist/nix-devenv?dir=shells/tofu
 
 # B: Pin it in a project's .envrc — direnv activates the remote shell
 echo 'use flake github:dryvist/nix-devenv?dir=shells/orchestrator --impure' \
   > .envrc
 
 # C: Root flake (convenience) — larger root lock, fine for one-offs
-nix develop github:dryvist/nix-devenv#terraform
+nix develop github:dryvist/nix-devenv#tofu
 
 # E: Scaffold a new repo's dev environment from a template
 nix flake init -t github:dryvist/nix-devenv#mkshell    # lightweight mkShell
@@ -87,7 +87,7 @@ outputs = { nix-devenv, nixpkgs, ... }: {
 | Shell | Tooling |
 | --- | --- |
 | `ansible` | ansible, ansible-lint, molecule, sops, age |
-| `terraform` | terraform, opentofu, tflint, tfsec, trivy; local checks for Terrakube workspaces |
+| `tofu` | terraform, opentofu, tflint, tfsec, trivy; local checks for Terrakube workspaces |
 | `kubernetes` | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
 | `containers` | docker, buildkit, crane, skopeo |
 | `typescript` | nodejs 22 LTS, pnpm, typescript, ts-language-server, biome |
@@ -151,7 +151,7 @@ shell never inherit the `devenv` dependency tree.
 
 ```bash
 # A single shell's lock
-cd shells/terraform && nix flake update
+cd shells/tofu && nix flake update
 
 # Root lock (affects root-flake consumers)
 nix flake update

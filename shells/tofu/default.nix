@@ -7,10 +7,60 @@
 { pkgs }:
 let
   awsShell = import ../aws/default.nix { inherit pkgs; };
+
+  terrakubeEnv = pkgs.writeShellScriptBin "export-terrakube-env" ''
+    export PATH="${
+      pkgs.lib.makeBinPath [
+        pkgs.git
+        pkgs.coreutils
+        pkgs.jq
+        pkgs.curl
+      ]
+    }:$PATH"
+
+    # Use the primary checkout's directory name so linked worktrees share a workspace.
+    if repo_path=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
+      repo_name=$(basename "$(dirname "$repo_path")")
+      printf 'export TF_WORKSPACE=%q\n' "$repo_name"
+    fi
+
+    if [ -n "''${BAO_ADDR:-}" ] \
+      && [ -n "''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID:-}" ] \
+      && [ -n "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID:-}" ]; then
+      _bao_token="$(
+        jq -n \
+          --arg role_id "''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID}" \
+          --arg secret_id "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID}" \
+          '{role_id: $role_id, secret_id: $secret_id}' |
+          curl -sSf --connect-timeout 3 --max-time 8 \
+            -X POST "''${BAO_ADDR%/}/v1/auth/approle/login" \
+            -H 'Content-Type: application/json' \
+            --data @- |
+          jq -r '.auth.client_token // empty' 2>/dev/null
+      )"
+
+      if [ -n "$_bao_token" ]; then
+        curl -sSf --connect-timeout 3 --max-time 8 \
+          -H "X-Vault-Token: $_bao_token" \
+          "''${BAO_ADDR%/}/v1/secret/data/platform/terrakube/main" |
+          jq -r '
+            .data.data
+            | {
+                TF_CLOUD_HOSTNAME,
+                TF_CLOUD_ORGANIZATION
+              }
+            | to_entries[]
+            | select(.value != null)
+            | "export \(.key)=\(.value | @sh)"
+          ' 2>/dev/null
+      fi
+    fi
+  '';
 in
 pkgs.mkShell {
   inputsFrom = [ awsShell ];
   buildInputs = with pkgs; [
+    terrakubeEnv
     # === Infrastructure as Code ===
     terraform
     opentofu

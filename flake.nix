@@ -51,7 +51,7 @@
       # The nixpkgs channel is pinned once in channels/flake.nix; this flake
       # and every shell follow it via channels.url + nixpkgs.follows.
       # For isolated locks, use ?dir= pattern instead:
-      #   nix develop github:JacobPEvans/nix-devenv?dir=shells/terraform
+      #   nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
       devShells = forAllSystems (
         system:
         let
@@ -82,7 +82,7 @@
               ps.hvac # community.hashi_vault (openbao_secrets role)
             ];
           };
-          terraform = import ./shells/terraform/default.nix { pkgs = pkgsUnfree; };
+          tofu = import ./shells/tofu/default.nix { pkgs = pkgsUnfree; };
           kubernetes = import ./shells/kubernetes/default.nix { inherit pkgs; };
           containers = import ./shells/containers/default.nix { inherit pkgs; };
           typescript = import ./shells/typescript/default.nix { inherit pkgs; };
