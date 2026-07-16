@@ -1,16 +1,57 @@
-# Terraform/Terragrunt Infrastructure as Code Shell
+# OpenTofu/Terragrunt Infrastructure as Code Shell
 #
-# Complete IaC environment with Terraform, Terragrunt, security scanners,
+# Complete IaC environment with OpenTofu, Terragrunt, security scanners,
 # and AWS/Docker integration.
 #
 # NOTE: Caller must pass pkgs with config.allowUnfree = true for Terraform's BSL license.
 { pkgs }:
 let
   awsShell = import ../aws/default.nix { inherit pkgs; };
+
+  terrakubeEnv = pkgs.writeShellScriptBin "export-terrakube-env" ''
+    # Use the primary checkout's directory name so linked worktrees share a workspace.
+    if repo_path=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
+      repo_name=$(basename "$(dirname "$repo_path")")
+      printf 'export TF_WORKSPACE=%q\n' "$repo_name"
+    fi
+
+    if [ -n "''${BAO_ADDR:-}" ] \
+      && [ -n "''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID:-}" ] \
+      && [ -n "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID:-}" ]; then
+      _bao_token="$(
+        jq -n \
+          --arg role_id "''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID}" \
+          --arg secret_id "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID}" \
+          '{role_id: $role_id, secret_id: $secret_id}' |
+          curl -sSf --connect-timeout 3 --max-time 8 \
+            -X POST "''${BAO_ADDR%/}/v1/auth/approle/login" \
+            -H 'Content-Type: application/json' \
+            --data @- |
+          jq -r '.auth.client_token // empty'
+      )"
+
+      if [ -n "$_bao_token" ]; then
+        curl -sSf --connect-timeout 3 --max-time 8 \
+          -H "X-Vault-Token: $_bao_token" \
+          "''${BAO_ADDR%/}/v1/secret/data/platform/terrakube/main" |
+          jq -r '
+            .data.data
+            | {
+                TF_CLOUD_HOSTNAME,
+                TF_CLOUD_ORGANIZATION
+              }
+            | to_entries[]
+            | select(.value != null)
+            | "export \(.key)=\(.value | @sh)"
+          '
+      fi
+    fi
+  '';
 in
 pkgs.mkShell {
   inputsFrom = [ awsShell ];
   buildInputs = with pkgs; [
+    terrakubeEnv
     # === Infrastructure as Code ===
     terraform
     terragrunt
@@ -44,7 +85,7 @@ pkgs.mkShell {
   shellHook = ''
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "═══════════════════════════════════════════════════════════════"
-      echo "Terraform/Terragrunt Infrastructure as Code Environment"
+      echo "OpenTofu/Terragrunt Infrastructure as Code Environment"
       echo "═══════════════════════════════════════════════════════════════"
       echo ""
       echo "Infrastructure as Code:"
@@ -65,7 +106,7 @@ pkgs.mkShell {
       echo "Getting Started:"
       echo "  1. Configure AWS credentials: aws configure"
       echo "  2. Configure Proxmox API token (environment variable or file)"
-      echo "  3. Initialize Terraform: terragrunt init"
+      echo "  3. Initialize OpenTofu: terragrunt init"
       echo "  4. Setup pre-commit hooks: pre-commit install"
       echo ""
     fi
