@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/dryvist/nix-devenv/compare/v0.15.2...v0.16.0) (2026-07-20)
+
+
+### Features
+
+* **ansible-apps:** add netutils for the nautobot gql_inventory plugin ([#80](https://github.com/dryvist/nix-devenv/issues/80)) ([681495d](https://github.com/dryvist/nix-devenv/commit/681495db703d7076480aa53d55882079d4b0fdda))
+
 ## [0.15.2](https://github.com/dryvist/nix-devenv/compare/v0.15.1...v0.15.2) (2026-07-16)
 
 
