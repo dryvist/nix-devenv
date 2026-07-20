@@ -161,7 +161,9 @@ The three patterns, in order of preference:
    ```
 
    A binary that *prints* exports composes with any shell and leaves no trace
-   if never called; a `shellHook` that exports would run on every `cd`.
+   if never called. A `shellHook` that exports is no safer than `.envrc` —
+   direnv captures its output during evaluation and persists it to the same
+   on-disk cache.
 3. **A helper function for tools that only read the environment.** `gh` reads
    `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
    `gh-read` (read scope) and `gh-claim` (per-repo write lease, released when
