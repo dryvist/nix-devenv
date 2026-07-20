@@ -136,6 +136,44 @@ consumer resolves a ~2-node lock while a `devenv` consumer resolves the full
 shell, each with an isolated lock** — importers that only want a lightweight
 shell never inherit the `devenv` dependency tree.
 
+## Credentials in a dev shell
+
+Shells here ship tooling, never credentials. The contract is the same in every
+consuming repo, and it is deliberately dynamic — nothing long-lived is stored
+on disk or baked into a shell.
+
+**Never export a secret from `.envrc`.** direnv caches its resolved environment
+to disk, so anything minted at `.envrc` load time is persisted there. Mint at
+call time instead, in the shell that needs it.
+
+The three patterns, in order of preference:
+
+1. **Let the tool resolve it itself.** `git` needs no token — a credential
+   helper answers each request with a freshly minted, short-lived credential.
+   `aws` does the same through `credential_process`. Nothing to wire per shell.
+2. **A command that prints exports, eval'd on demand.** See
+   `shells/tofu/default.nix`, which puts `export-terrakube-env` on `PATH`: it
+   logs in, reads the values, and prints `export` lines. The shell does not run
+   it — the caller does, when needed:
+
+   ```bash
+   eval "$(export-terrakube-env)"
+   ```
+
+   A binary that *prints* exports composes with any shell and leaves no trace
+   if never called. A `shellHook` that exports is no safer than `.envrc` —
+   direnv captures its output during evaluation and persists it to the same
+   on-disk cache.
+3. **A helper function for tools that only read the environment.** `gh` reads
+   `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
+   `gh-read` (read scope) and `gh-claim` (per-repo write lease, released when
+   the shell exits). Both infer the target from the `origin` remote and mint per
+   call.
+
+Bootstrap credentials (vault address, role ids) are ambient — injected by the
+secrets manager into the environment the shell inherits — so no shell definition
+here contains one.
+
 ## Adding a shell
 
 1. Create `shells/<name>/default.nix` with the shell definition.
