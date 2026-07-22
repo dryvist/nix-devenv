@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.3](https://github.com/dryvist/nix-devenv/compare/v0.16.2...v0.16.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* **ansible-apps:** add OpenBao 2.5.5 CLI ([93f4a4c](https://github.com/dryvist/nix-devenv/commit/93f4a4c5db5e7a61a328bd1a4efccfe5eb525ff6))
+
 ## [0.16.2](https://github.com/dryvist/nix-devenv/compare/v0.16.1...v0.16.2) (2026-07-22)
 
 
