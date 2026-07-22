@@ -75,7 +75,21 @@
           ansible = import ./shells/ansible/default.nix { inherit pkgs; };
           ansible-apps = import ./shells/ansible/default.nix {
             inherit pkgs;
-            extraPackages = [ pkgs.doppler ];
+            extraPackages = [
+              pkgs.doppler
+              ((pkgs.openbao.override { withUi = false; }).overrideAttrs (
+                finalAttrs: _previousAttrs: {
+                  version = "2.5.5";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "openbao";
+                    repo = "openbao";
+                    tag = "v${finalAttrs.version}";
+                    hash = "sha256-75Rm9EGkvUKJ05d55bboPAE+Nm/GLLgH1TqDrExkJO0=";
+                  };
+                  vendorHash = "sha256-3d3g6f0O7X+aedYCfLbqLNuITKNQuxZkApWTTKSk7lA=";
+                }
+              ))
+            ];
             extraPythonPackages = ps: [
               ps.docker
               ps.httplib2
