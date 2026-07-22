@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.1](https://github.com/dryvist/nix-devenv/compare/v0.16.0...v0.16.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* **ansible-apps:** add proxmoxer controller dependency ([31106c8](https://github.com/dryvist/nix-devenv/commit/31106c88ef575f0b82480898ebee557d32dc3d43))
+
 ## [0.16.0](https://github.com/dryvist/nix-devenv/compare/v0.15.2...v0.16.0) (2026-07-20)
 
 
