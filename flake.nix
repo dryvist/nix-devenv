@@ -81,6 +81,7 @@
               ps.httplib2
               ps.hvac # community.hashi_vault (openbao_secrets role)
               ps.netutils # networktocode.nautobot gql_inventory plugin
+              ps.proxmoxer # community.proxmox controller modules
             ];
           };
           tofu = import ./shells/tofu/default.nix { pkgs = pkgsUnfree; };
