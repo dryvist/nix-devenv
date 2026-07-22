@@ -81,7 +81,15 @@
               ps.httplib2
               ps.hvac # community.hashi_vault (openbao_secrets role)
               ps.netutils # networktocode.nautobot gql_inventory plugin
-              ps.proxmoxer # community.proxmox controller modules
+              (ps.proxmoxer.overridePythonAttrs (_: {
+                # The pinned nixpkgs revision labels pre-2.3 source as 2.3.0.
+                src = pkgs.fetchFromGitHub {
+                  owner = "proxmoxer";
+                  repo = "proxmoxer";
+                  rev = "99fe9814d6212c614a944ce7b3d907e05042c4fa";
+                  hash = "sha256-v/QqNCzkcYk2pqr9tTeyvEEeXt4nzqooHAQEIiJitZ4=";
+                };
+              }))
             ];
           };
           tofu = import ./shells/tofu/default.nix { pkgs = pkgsUnfree; };
