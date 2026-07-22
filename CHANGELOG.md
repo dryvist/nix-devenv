@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.2](https://github.com/dryvist/nix-devenv/compare/v0.16.1...v0.16.2) (2026-07-22)
+
+
+### Bug Fixes
+
+* **ansible-apps:** fetch actual proxmoxer 2.3.0 source ([#91](https://github.com/dryvist/nix-devenv/issues/91)) ([7ab779e](https://github.com/dryvist/nix-devenv/commit/7ab779ecb469cc4ac0d28f2294548c1ce3b3b4ee))
+
 ## [0.16.1](https://github.com/dryvist/nix-devenv/compare/v0.16.0...v0.16.1) (2026-07-22)
 
 
