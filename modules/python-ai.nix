@@ -12,6 +12,7 @@
     package = import ../lib/python.nix { inherit pkgs; };
     venv.enable = true;
     venv.requirements = ''
+      harbor
       langchain
       langchain-core
       langchain-openai
