@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/dryvist/nix-devenv/compare/v0.16.3...v0.17.0) (2026-07-28)
+
+
+### Features
+
+* **python-ai:** add harbor AI evaluation framework ([#99](https://github.com/dryvist/nix-devenv/issues/99)) ([aebfdef](https://github.com/dryvist/nix-devenv/commit/aebfdefa0b64e59a23b3dbe2f9866bca1cba56b3))
+
 ## [0.16.3](https://github.com/dryvist/nix-devenv/compare/v0.16.2...v0.16.3) (2026-07-22)
 
 
