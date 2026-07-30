@@ -25,6 +25,12 @@ let
       # the native amazon.aws S3 path keeps working if that ever changes.
       boto3
       botocore
+      # community.hashi_vault's library dep, for the same reason as boto3
+      # above. Without it every vault_* task fails on import, and a caller
+      # that registers the result with failed_when: false swallows the import
+      # error and reports a missing OpenBao permission instead — an hour spent
+      # auditing policies that were fine.
+      hvac
     ])
     ++ (extraPythonPackages ps)
   );
