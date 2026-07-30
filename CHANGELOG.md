@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.1](https://github.com/dryvist/nix-devenv/compare/v0.17.0...v0.17.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* **ansible:** add hvac so community.hashi_vault modules can run ([#106](https://github.com/dryvist/nix-devenv/issues/106)) ([484a584](https://github.com/dryvist/nix-devenv/commit/484a584428eaccc9733ae802a41ca6725fc3a5df))
+
 ## [0.17.0](https://github.com/dryvist/nix-devenv/compare/v0.16.3...v0.17.0) (2026-07-28)
 
 
