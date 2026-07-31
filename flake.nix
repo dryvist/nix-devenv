@@ -77,6 +77,14 @@
             inherit pkgs;
             extraPackages = [
               pkgs.doppler
+              # Vendor-neutral S3 client. Playbooks that publish or fetch
+              # artifacts shell out to it, so without it declared here every
+              # object-storage task exits 2 and reads as a store outage rather
+              # than a missing tool — the same failure shape the hvac note in
+              # shells/ansible/default.nix describes. It currently resolves
+              # only by leaking in from the system profile, which is the same
+              # fragility in a slower form.
+              pkgs.awscli2
               ((pkgs.openbao.override { withUi = false; }).overrideAttrs (
                 finalAttrs: _previousAttrs: {
                   version = "2.5.5";
