@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/dryvist/nix-devenv/compare/v0.17.1...v0.18.0) (2026-08-02)
+
+
+### Features
+
+* **ansible-apps:** declare the object-storage client in the dev shell ([#111](https://github.com/dryvist/nix-devenv/issues/111)) ([024c799](https://github.com/dryvist/nix-devenv/commit/024c799f1a067be8cf346e55800d351f63692e72))
+
 ## [0.17.1](https://github.com/dryvist/nix-devenv/compare/v0.17.0...v0.17.1) (2026-07-30)
 
 
