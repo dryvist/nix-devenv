@@ -4,7 +4,13 @@
 # Terrakube. Terrakube obtains runtime credentials directly from OpenBao.
 #
 # NOTE: Caller must pass pkgs with config.allowUnfree = true for Terraform's BSL license.
-{ pkgs }:
+#
+# `pkgsUnstable` supplies opentofu alone and defaults to `pkgs`, so importing
+# this file the old way still evaluates — it just gives you the stable version.
+{
+  pkgs,
+  pkgsUnstable ? pkgs,
+}:
 let
   awsShell = import ../aws/default.nix { inherit pkgs; };
 
@@ -63,7 +69,15 @@ pkgs.mkShell {
     terrakubeEnv
     # === Infrastructure as Code ===
     terraform
-    opentofu
+    # Unstable, not the stable channel. Terrakube workspaces declare a version
+    # constraint, and the CLI enforces it on any command that touches state
+    # LOCALLY — `state rm`, `state mv`, `taint`. Plans and applies run remotely
+    # and never noticed, so the shell looked fine right up until someone needed
+    # to correct state, and then the only offered way forward was
+    # `-ignore-remote-version`, which its own error text says may leave the
+    # workspace unusable. Stable carried 1.11.8 against a `~> 1.12.0`
+    # constraint. Drop this override once the stable channel catches up.
+    pkgsUnstable.opentofu
     terraform-docs
     tflint
 
