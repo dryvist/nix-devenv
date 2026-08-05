@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.19.0](https://github.com/dryvist/nix-devenv/compare/v0.18.0...v0.19.0) (2026-08-05)
+
+
+### Features
+
+* **ci:** relock the whole flake into a single pull request ([#117](https://github.com/dryvist/nix-devenv/issues/117)) ([0725150](https://github.com/dryvist/nix-devenv/commit/07251507db4403eda0d7ff7a2ecf98899401afa1))
+* **tofu:** take opentofu from unstable to satisfy remote version constraints ([48c3b0a](https://github.com/dryvist/nix-devenv/commit/48c3b0a4953afee40a753d0d447737d7c6352d27))
+* **tofu:** take opentofu from unstable to satisfy remote version constraints ([089c0a1](https://github.com/dryvist/nix-devenv/commit/089c0a1739a8ec01c48dcfc996361a2c03dadef2))
+
+
+### Bug Fixes
+
+* **flake:** pass pkgsUnstable to the root tofu shell ([c868a74](https://github.com/dryvist/nix-devenv/commit/c868a74144ea6a421a3fc84e40a1a18c868c706f))
+
 ## [0.18.0](https://github.com/dryvist/nix-devenv/compare/v0.17.1...v0.18.0) (2026-08-02)
 
 
