@@ -1,0 +1,36 @@
+# Relock flake.lock — the single writer of this repo's lock files
+#
+# The shared workflow runs a bare `nix flake update`, so every root input moves
+# together and lands in ONE pull request on the branch `chore/flake-lock`.
+#
+# `channels_dir` matters here: the channels/ sub-flake owns its own lock, and a
+# root relock does not descend into it, so the shared workflow relocks that
+# sub-flake first and the root second.
+#
+# This replaced deps-refresh-nixpkgs.yml on 2026-08-05. That workflow refreshed
+# exactly one input per call, so `nixpkgs-unstable` was never refreshed at all.
+#
+# Renovate does not and cannot do this job. It advances an input when the
+# input's REFERENCE changes; both nixpkgs pins here are moving channel branches
+# whose reference never changes. Measured 2026-07-28: channels/flake.lock had
+# been modified exactly once in the 8 weeks since it was created, with Renovate
+# running the whole time. Its `nix` manager is disabled org-wide
+# (renovate-nix.json) so this workflow stays the only writer of flake.lock.
+name: Update flake.lock
+
+on:
+  schedule:
+    # Thursday 18:00 UTC. GitHub Actions cron is always UTC. The minute differs
+    # per repo so the six nix repos do not all fire in the same instant.
+    - cron: "27 18 * * 4"
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  relock:
+    uses: dryvist/.github/.github/workflows/_update-flake-lock.yml@main
+    with:
+      channels_dir: channels
+    secrets:
+      GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}

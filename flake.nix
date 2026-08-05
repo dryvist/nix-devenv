@@ -5,6 +5,9 @@
     # Channel pinned once in ./channels; see channels/flake.nix.
     channels.url = "path:./channels";
     nixpkgs.follows = "channels/nixpkgs";
+    # Per-package escape hatch; see channels/flake.nix. Consumed only where a
+    # shell needs a package the stable channel cannot yet supply.
+    nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
 
     devenv = {
       url = "github:cachix/devenv";
@@ -32,6 +35,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       devenv,
       ...
     }@inputs:
@@ -57,6 +61,10 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
           pkgsUnfree = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgsUnstableUnfree = import nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;
           };
@@ -114,7 +122,14 @@
               }))
             ];
           };
-          tofu = import ./shells/tofu/default.nix { pkgs = pkgsUnfree; };
+          # pkgsUnstable must be passed here too. It defaults to `pkgs`, so
+          # omitting it does not fail — it silently hands out the stable
+          # opentofu, and `nix develop .#tofu` would then disagree with
+          # `nix develop ?dir=shells/tofu` about the version.
+          tofu = import ./shells/tofu/default.nix {
+            pkgs = pkgsUnfree;
+            pkgsUnstable = pkgsUnstableUnfree;
+          };
           kubernetes = import ./shells/kubernetes/default.nix { inherit pkgs; };
           containers = import ./shells/containers/default.nix { inherit pkgs; };
           typescript = import ./shells/typescript/default.nix { inherit pkgs; };
