@@ -16,6 +16,18 @@
   # then the root, whole-file, weekly.
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
 
+  # Escape hatch for tools whose usable version outruns the stable channel.
+  # A stable branch cannot cross a release boundary, so when a tool on it is
+  # too old to do its job, waiting for the next release is the only other
+  # option — six months, in the worst case.
+  #
+  # Use it for INDIVIDUAL PACKAGES, never for a whole shell. Every package
+  # taken from here trades reproducibility for currency, so each one should be
+  # able to point at the thing that broke without it. Today: opentofu in
+  # shells/tofu, because Terrakube workspaces require ~> 1.12.0 and the stable
+  # channel carries 1.11.8, which fails every local state command.
+  inputs.nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
   # No outputs are needed: followers reference the `nixpkgs` INPUT via `follows`,
   # not an output. This flake exists purely to own the channel pin + its lock.
   outputs = { ... }: { };
