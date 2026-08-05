@@ -12,7 +12,8 @@
 
   # Channel branch = the intended major-version pin. Renovate cannot bump
   # this: a branch's reference never changes, only the commits on it do, so
-  # Renovate has nothing to diff. deps-refresh-nixpkgs.yml relocks it weekly.
+  # Renovate has nothing to diff. deps-flake-lock.yml relocks this sub-flake and
+  # then the root, whole-file, weekly.
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
 
   # No outputs are needed: followers reference the `nixpkgs` INPUT via `follows`,
