@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.1](https://github.com/dryvist/nix-devenv/compare/v0.19.0...v0.19.1) (2026-08-06)
+
+
+### Bug Fixes
+
+* **tofu:** fail loudly when backend coordinates cannot be fetched ([63e71d7](https://github.com/dryvist/nix-devenv/commit/63e71d7379735a6fe7a79110b899846498231a14))
+* **tofu:** fail loudly when backend coordinates cannot be fetched ([9f9821a](https://github.com/dryvist/nix-devenv/commit/9f9821a5be5ff388ec7864fcdfb5504e45ba3dfc))
+
 ## [0.19.0](https://github.com/dryvist/nix-devenv/compare/v0.18.0...v0.19.0) (2026-08-05)
 
 
