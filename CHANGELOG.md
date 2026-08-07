@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/dryvist/nix-devenv/compare/v0.19.1...v0.20.0) (2026-08-07)
+
+
+### Features
+
+* **ansible:** add pywinrm so WinRM hosts are reachable at all ([#124](https://github.com/dryvist/nix-devenv/issues/124)) ([fb44217](https://github.com/dryvist/nix-devenv/commit/fb442176d5e306e25ee10b0461f9572b5d8e98e4))
+
 ## [0.19.1](https://github.com/dryvist/nix-devenv/compare/v0.19.0...v0.19.1) (2026-08-06)
 
 
