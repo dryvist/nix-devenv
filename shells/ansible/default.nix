@@ -31,6 +31,12 @@ let
       # error and reports a missing OpenBao permission instead — an hour spent
       # auditing policies that were fine.
       hvac
+      # ansible.windows targets reach their host over WinRM, and the winrm
+      # connection plugin imports this from the interpreter running ansible
+      # itself — the same reason boto3 and hvac are pinned here. Without it a
+      # Windows host fails at connection time, before any task runs, which
+      # reads as an unreachable guest rather than a missing library.
+      pywinrm
     ])
     ++ (extraPythonPackages ps)
   );
