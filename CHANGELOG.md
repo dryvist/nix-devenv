@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.1](https://github.com/dryvist/nix-devenv/compare/v0.20.0...v0.20.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **tofu:** drop the terminal-bypass advice from the failure banner ([#128](https://github.com/dryvist/nix-devenv/issues/128)) ([09d607d](https://github.com/dryvist/nix-devenv/commit/09d607d15ad759ee5eb73c6ccceafb7810b8cf7b))
+
 ## [0.20.0](https://github.com/dryvist/nix-devenv/compare/v0.19.1...v0.20.0) (2026-08-07)
 
 
