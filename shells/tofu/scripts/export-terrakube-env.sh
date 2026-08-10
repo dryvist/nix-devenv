@@ -25,8 +25,6 @@ fail() {
   printf '\n' >&2
   printf 'Backend coordinates come from OpenBao and nowhere else.\n' >&2
   printf '  - Run the command under the secret-zero injector so the AppRole is ambient.\n' >&2
-  printf '  - A connection refused in ~2ms is host-level network policy, not an outage.\n' >&2
-  printf '    Re-run from a terminal that is permitted to reach the local network.\n' >&2
   printf '  - Never substitute a locally stored token. No supported local copy exists.\n' >&2
   printf '  - Offline validate only: TERRAKUBE_ENV_OPTIONAL=1\n' >&2
   exit 1
