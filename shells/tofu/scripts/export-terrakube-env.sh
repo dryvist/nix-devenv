@@ -30,9 +30,26 @@ fail() {
   exit 1
 }
 
-# Use the primary checkout's directory name so linked worktrees share a workspace.
-if repo_path=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
-  printf 'export TF_WORKSPACE=%q\n' "$(basename "$(dirname "$repo_path")")"
+# The workspace follows the repository, not the checkout directory.
+#
+# This used to be `basename(dirname(git-common-dir))`, which assumes the git dir
+# sits directly inside a directory named after the repository. That holds for a
+# plain clone, but not for a <repo>/<branch>/ layout, where every branch is its
+# own clone and the parent of the git dir is the branch name. There it resolved
+# to "main" and init failed with `failed to find workspace "main"`.
+#
+# The remote URL is identical across every clone and linked worktree of a repo,
+# which is exactly the "linked checkouts share one workspace" property intended
+# here, and it does not depend on where the checkout happens to live on disk.
+# The directory heuristic stays as a fallback for a checkout with no remote.
+terrakube_workspace=""
+if remote_url=$(git config --get remote.origin.url 2>/dev/null) && [ -n "$remote_url" ]; then
+  terrakube_workspace="$(basename -s .git "$remote_url")"
+elif repo_path=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
+  terrakube_workspace="$(basename "$(dirname "$repo_path")")"
+fi
+if [ -n "$terrakube_workspace" ]; then
+  printf 'export TF_WORKSPACE=%q\n' "$terrakube_workspace"
 fi
 
 [ -n "${BAO_ADDR:-}" ] || fail "BAO_ADDR is not set"
