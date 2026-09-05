@@ -151,19 +151,15 @@ The three patterns, in order of preference:
 1. **Let the tool resolve it itself.** `git` needs no token — a credential
    helper answers each request with a freshly minted, short-lived credential.
    `aws` does the same through `credential_process`. Nothing to wire per shell.
-2. **A command that prints exports, eval'd on demand.** See
-   `shells/tofu/default.nix`, which puts `export-terrakube-env` on `PATH`: it
-   logs in, reads the values, and prints `export` lines. The shell does not run
-   it — the caller does, when needed:
-
-   ```bash
-   eval "$(export-terrakube-env)"
-   ```
-
-   A binary that *prints* exports composes with any shell and leaves no trace
-   if never called. A `shellHook` that exports is no safer than `.envrc` —
-   direnv captures its output during evaluation and persists it to the same
-   on-disk cache.
+2. **Non-secret coordinates read in the `shellHook` with the vendor CLI.** See
+   `shells/tofu/default.nix`: it logs in with the ambient AppRole and reads
+   `TF_CLOUD_HOSTNAME` / `TF_CLOUD_ORGANIZATION` with `bao kv get`. Those two
+   are addresses, not credentials, so caching them is not a leak; the token
+   used to fetch them is scoped to the two calls and never exported. An empty
+   value aborts the shell. `TERRAKUBE_ENV_OPTIONAL=1` skips the block, for
+   offline `tofu validate` only. A real secret still must not be exported
+   here — direnv persists a `shellHook`'s environment to the same on-disk
+   cache as `.envrc`.
 3. **A helper function for tools that only read the environment.** `gh` reads
    `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
    `gh-read` (read scope) and `gh-claim` (per-repo write lease, released when
