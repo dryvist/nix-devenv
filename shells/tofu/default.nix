@@ -13,25 +13,10 @@
 }:
 let
   awsShell = import ../aws/default.nix { inherit pkgs; };
-
-  # Body lives in scripts/ rather than inline: the previous inline form needed
-  # ''${...} escaping on every shell expansion, which is how the failure paths
-  # ended up untested and silent.
-  terrakubeEnv = pkgs.writeShellApplication {
-    name = "export-terrakube-env";
-    runtimeInputs = with pkgs; [
-      git
-      coreutils
-      jq
-      curl
-    ];
-    text = builtins.readFile ./scripts/export-terrakube-env.sh;
-  };
 in
 pkgs.mkShell {
   inputsFrom = [ awsShell ];
   buildInputs = with pkgs; [
-    terrakubeEnv
     # === Infrastructure as Code ===
     terraform
     # Unstable, not the stable channel. Terrakube workspaces declare a version
@@ -57,6 +42,7 @@ pkgs.mkShell {
     # === Secrets Management ===
     sops
     age
+    openbao
 
     # === Development ===
     git
@@ -69,7 +55,33 @@ pkgs.mkShell {
     # NOTE: awscli2 + aws-vault inherited from awsShell via inputsFrom
   ];
 
+  # Terrakube backend coordinates come from OpenBao and nowhere else. An empty
+  # value fails here rather than later as OpenTofu's "organization must be
+  # set", which names a config field instead of a failed secret fetch. Offline
+  # validation (`tofu init -backend=false && tofu validate`) is the only
+  # supported reason to continue without them, and it must be asked for.
   shellHook = ''
+    # Keyed on the remote, not the checkout path: every clone and linked
+    # worktree of a repo shares one workspace wherever it sits on disk.
+    if _remote="$(git config --get remote.origin.url 2>/dev/null)"; then
+      export TF_WORKSPACE="$(basename -s .git "$_remote")"
+    elif _gitdir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+      export TF_WORKSPACE="$(basename "$(dirname "$_gitdir")")"
+    fi
+    unset _remote _gitdir
+    if [ -z "''${TERRAKUBE_ENV_OPTIONAL:-}" ]; then
+      _bao_tok="$(printf '%s' "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID:-}" \
+        | bao write -field=token auth/approle/login \
+            role_id="''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID:-}" secret_id=-)"
+      TF_CLOUD_HOSTNAME="$(BAO_TOKEN="$_bao_tok" bao kv get -field=TF_CLOUD_HOSTNAME secret/platform/terrakube/main)"
+      TF_CLOUD_ORGANIZATION="$(BAO_TOKEN="$_bao_tok" bao kv get -field=TF_CLOUD_ORGANIZATION secret/platform/terrakube/main)"
+      unset _bao_tok
+      if [ -z "$TF_CLOUD_HOSTNAME" ] || [ -z "$TF_CLOUD_ORGANIZATION" ]; then
+        echo "tofu shell: OpenBao returned no Terrakube backend coordinates; TERRAKUBE_ENV_OPTIONAL=1 for offline validate only" >&2
+        exit 1
+      fi
+      export TF_CLOUD_HOSTNAME TF_CLOUD_ORGANIZATION
+    fi
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "═══════════════════════════════════════════════════════════════"
       echo "OpenTofu Infrastructure as Code Environment"
