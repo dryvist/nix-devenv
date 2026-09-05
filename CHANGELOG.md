@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.2](https://github.com/dryvist/nix-devenv/compare/v0.20.1...v0.20.2) (2026-09-05)
+
+
+### Bug Fixes
+
+* **tofu:** derive TF_WORKSPACE from the remote, not the directory ([#132](https://github.com/dryvist/nix-devenv/issues/132)) ([bcc75b1](https://github.com/dryvist/nix-devenv/commit/bcc75b108653bdfbda5aef76de497ebfd0b9a157))
+
 ## [0.20.1](https://github.com/dryvist/nix-devenv/compare/v0.20.0...v0.20.1) (2026-08-10)
 
 
