@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.3](https://github.com/dryvist/nix-devenv/compare/v0.20.2...v0.20.3) (2026-09-12)
+
+
+### Bug Fixes
+
+* **tofu:** check the OpenBao variables before calling bao ([#137](https://github.com/dryvist/nix-devenv/issues/137)) ([6bb37d0](https://github.com/dryvist/nix-devenv/commit/6bb37d0de69ccc940d1460172dd0dad9e87af962))
+
 ## [0.20.2](https://github.com/dryvist/nix-devenv/compare/v0.20.1...v0.20.2) (2026-09-05)
 
 
