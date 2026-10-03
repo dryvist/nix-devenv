@@ -30,5 +30,5 @@
 
   # No outputs are needed: followers reference the `nixpkgs` INPUT via `follows`,
   # not an output. This flake exists purely to own the channel pin + its lock.
-  outputs = { ... }: { };
+  outputs = _: { };
 }

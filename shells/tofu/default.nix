@@ -1,7 +1,7 @@
 # OpenTofu Infrastructure as Code Shell
 #
 # Local authoring and validation tools for OpenTofu configurations executed by
-# Terrakube. Terrakube obtains runtime credentials directly from OpenBao.
+# Terrakube. Terrakube injects runtime credentials into each run.
 #
 # NOTE: Caller must pass pkgs with config.allowUnfree = true for Terraform's BSL license.
 #
@@ -55,13 +55,15 @@ pkgs.mkShell {
     # NOTE: awscli2 + aws-vault inherited from awsShell via inputsFrom
   ];
 
-  # Terrakube backend coordinates come from OpenBao and nowhere else. An empty
-  # value fails here rather than later as OpenTofu's "organization must be
-  # set", which names a config field instead of a failed secret fetch. Offline
+  # Terrakube backend coordinates come from the environment: TF_CLOUD_HOSTNAME
+  # and TF_CLOUD_ORGANIZATION, for example from a `.env` file. When either is
+  # unset and TF_CLOUD_ENV_CMD is set, the shell runs that command, which
+  # prints the hostname and then the organization, one per line. An empty
+  # result fails here rather than later as OpenTofu's "organization must be
+  # set", which names a config field instead of the missing value. Offline
   # validation (`tofu init -backend=false && tofu validate`) is the only
   # supported reason to continue without them, and it must be asked for. A
-  # shell entered without the AppRole in its environment still opens; it says
-  # which variables are missing and skips the fetch.
+  # shell with neither the values nor the command still opens and says so.
   shellHook = ''
     # Keyed on the remote, not the checkout path: every clone and linked
     # worktree of a repo shares one workspace wherever it sits on disk.
@@ -72,36 +74,25 @@ pkgs.mkShell {
     fi
     unset _remote _gitdir
     if [ -z "''${TERRAKUBE_ENV_OPTIONAL:-}" ]; then
-      # Precondition, checked before any bao call. Unset, the CLI falls back to
-      # its own compiled-in default address, nothing is listening there, and the
-      # operator gets a connection refused that reads as "the secret store is
-      # down" instead of "secret zero was never supplied to this shell".
-      _terrakube_missing=""
-      [ -n "''${BAO_ADDR:-}" ] || _terrakube_missing="$_terrakube_missing BAO_ADDR"
-      [ -n "''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID:-}" ] || _terrakube_missing="$_terrakube_missing OPENBAO_APPROLE_TERRAFORM_ROLE_ID"
-      [ -n "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID:-}" ] || _terrakube_missing="$_terrakube_missing OPENBAO_APPROLE_TERRAFORM_SECRET_ID"
-      if [ -n "$_terrakube_missing" ]; then
-        echo "tofu shell: not set:$_terrakube_missing" >&2
-        echo "" >&2
-        echo "Backend coordinates come from OpenBao and nowhere else." >&2
-        echo "  - Enter this directory under the secret-zero injector (doppler run -- ...) so the AppRole is ambient." >&2
-        echo "  - Never substitute a locally stored token. No supported local copy exists." >&2
-        echo "  - Offline validate only: TERRAKUBE_ENV_OPTIONAL=1" >&2
-        echo "tofu shell: continuing without Terrakube backend coordinates." >&2
-      else
-        _bao_tok="$(printf '%s' "''${OPENBAO_APPROLE_TERRAFORM_SECRET_ID:-}" \
-          | bao write -field=token auth/approle/login \
-              role_id="''${OPENBAO_APPROLE_TERRAFORM_ROLE_ID:-}" secret_id=-)"
-        TF_CLOUD_HOSTNAME="$(BAO_TOKEN="$_bao_tok" bao kv get -field=TF_CLOUD_HOSTNAME secret/platform/terrakube/main)"
-        TF_CLOUD_ORGANIZATION="$(BAO_TOKEN="$_bao_tok" bao kv get -field=TF_CLOUD_ORGANIZATION secret/platform/terrakube/main)"
-        unset _bao_tok
-        if [ -z "$TF_CLOUD_HOSTNAME" ] || [ -z "$TF_CLOUD_ORGANIZATION" ]; then
-          echo "tofu shell: OpenBao returned no Terrakube backend coordinates; TERRAKUBE_ENV_OPTIONAL=1 for offline validate only" >&2
+      if [ -n "''${TF_CLOUD_HOSTNAME:-}" ] && [ -n "''${TF_CLOUD_ORGANIZATION:-}" ]; then
+        export TF_CLOUD_HOSTNAME TF_CLOUD_ORGANIZATION
+      elif [ -n "''${TF_CLOUD_ENV_CMD:-}" ]; then
+        # The command may carry its own arguments.
+        read -ra _tf_cloud_cmd <<<"$TF_CLOUD_ENV_CMD"
+        { read -r TF_CLOUD_HOSTNAME; read -r TF_CLOUD_ORGANIZATION; } < <("''${_tf_cloud_cmd[@]}")
+        unset _tf_cloud_cmd
+        if [ -z "''${TF_CLOUD_HOSTNAME:-}" ] || [ -z "''${TF_CLOUD_ORGANIZATION:-}" ]; then
+          echo "tofu shell: TF_CLOUD_ENV_CMD printed no Terrakube backend coordinates; TERRAKUBE_ENV_OPTIONAL=1 for offline validate only" >&2
           exit 1
         fi
         export TF_CLOUD_HOSTNAME TF_CLOUD_ORGANIZATION
+      else
+        echo "tofu shell: TF_CLOUD_HOSTNAME and TF_CLOUD_ORGANIZATION are not set." >&2
+        echo "  - Set them in the environment (for example a .env file), or" >&2
+        echo "  - set TF_CLOUD_ENV_CMD to a command that prints them, one per line." >&2
+        echo "  - Offline validate only: TERRAKUBE_ENV_OPTIONAL=1" >&2
+        echo "tofu shell: continuing without Terrakube backend coordinates." >&2
       fi
-      unset _terrakube_missing
     fi
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "═══════════════════════════════════════════════════════════════"
@@ -125,7 +116,7 @@ pkgs.mkShell {
       echo "Getting Started:"
       echo "  1. Author and validate locally with OpenTofu"
       echo "  2. Run plans and applies in Terrakube"
-      echo "  3. Let Terrakube inject short-lived credentials from OpenBao"
+      echo "  3. Let Terrakube inject short-lived credentials"
       echo "  4. Setup pre-commit hooks: pre-commit install"
       echo ""
     fi
