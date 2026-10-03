@@ -163,8 +163,8 @@ The three patterns, in order of preference:
    `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
    functions that mint a scoped token per call.
 
-Bootstrap credentials are ambient — injected by the secrets manager into the
-environment the shell inherits — so no shell definition here contains one.
+Bootstrap credentials are read from the environment the shell inherits, so no
+shell definition here contains one.
 
 ## Adding a shell
 

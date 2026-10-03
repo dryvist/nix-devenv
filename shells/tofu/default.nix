@@ -1,7 +1,7 @@
 # OpenTofu Infrastructure as Code Shell
 #
 # Local authoring and validation tools for OpenTofu configurations executed by
-# Terrakube. Terrakube injects runtime credentials into each run.
+# Terrakube.
 #
 # NOTE: Caller must pass pkgs with config.allowUnfree = true for Terraform's BSL license.
 #
@@ -56,21 +56,23 @@ pkgs.mkShell {
   ];
 
   # Terrakube backend coordinates come from the environment: TF_CLOUD_HOSTNAME
-  # and TF_CLOUD_ORGANIZATION, for example from a `.env` file. When either is
-  # unset and TF_CLOUD_ENV_CMD is set, the shell runs that command, which
-  # prints the hostname and then the organization, one per line. An empty
-  # result fails here rather than later as OpenTofu's "organization must be
-  # set", which names a config field instead of the missing value. Offline
-  # validation (`tofu init -backend=false && tofu validate`) is the only
-  # supported reason to continue without them, and it must be asked for. A
-  # shell with neither the values nor the command still opens and says so.
+  # and TF_CLOUD_ORGANIZATION. When either is unset and TF_CLOUD_ENV_CMD is
+  # set, the shell runs that command, which prints the hostname and then the
+  # organization, one per line. An empty result fails here rather than later
+  # as OpenTofu's "organization must be set", which names a config field
+  # instead of the missing value. Offline validation (`tofu init
+  # -backend=false && tofu validate`) is the only supported reason to continue
+  # without them, and it must be asked for. A shell with neither the values nor
+  # the command still opens and says so.
   shellHook = ''
     # Keyed on the remote, not the checkout path: every clone and linked
     # worktree of a repo shares one workspace wherever it sits on disk.
     if _remote="$(git config --get remote.origin.url 2>/dev/null)"; then
-      export TF_WORKSPACE="$(basename -s .git "$_remote")"
+      TF_WORKSPACE="$(basename -s .git "$_remote")"
+      export TF_WORKSPACE
     elif _gitdir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
-      export TF_WORKSPACE="$(basename "$(dirname "$_gitdir")")"
+      TF_WORKSPACE="$(basename "$(dirname "$_gitdir")")"
+      export TF_WORKSPACE
     fi
     unset _remote _gitdir
     if [ -z "''${TERRAKUBE_ENV_OPTIONAL:-}" ]; then
@@ -88,7 +90,7 @@ pkgs.mkShell {
         export TF_CLOUD_HOSTNAME TF_CLOUD_ORGANIZATION
       else
         echo "tofu shell: TF_CLOUD_HOSTNAME and TF_CLOUD_ORGANIZATION are not set." >&2
-        echo "  - Set them in the environment (for example a .env file), or" >&2
+        echo "  - Set them in the environment, or" >&2
         echo "  - set TF_CLOUD_ENV_CMD to a command that prints them, one per line." >&2
         echo "  - Offline validate only: TERRAKUBE_ENV_OPTIONAL=1" >&2
         echo "tofu shell: continuing without Terrakube backend coordinates." >&2
@@ -116,8 +118,7 @@ pkgs.mkShell {
       echo "Getting Started:"
       echo "  1. Author and validate locally with OpenTofu"
       echo "  2. Run plans and applies in Terrakube"
-      echo "  3. Let Terrakube inject short-lived credentials"
-      echo "  4. Setup pre-commit hooks: pre-commit install"
+      echo "  3. Setup pre-commit hooks: pre-commit install"
       echo ""
     fi
   '';
