@@ -28,8 +28,7 @@ let
       # community.hashi_vault's library dep, for the same reason as boto3
       # above. Without it every vault_* task fails on import, and a caller
       # that registers the result with failed_when: false swallows the import
-      # error and reports a missing OpenBao permission instead — an hour spent
-      # auditing policies that were fine.
+      # error and reports a missing secret-store permission instead.
       hvac
       # ansible.windows targets reach their host over WinRM, and the winrm
       # connection plugin imports this from the interpreter running ansible

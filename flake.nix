@@ -46,7 +46,7 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+      forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
       # === Pre-built shells ===
@@ -109,7 +109,7 @@
             extraPythonPackages = ps: [
               ps.docker
               ps.httplib2
-              ps.hvac # community.hashi_vault (openbao_secrets role)
+              ps.hvac # community.hashi_vault
               ps.netutils # networktocode.nautobot gql_inventory plugin
               (ps.proxmoxer.overridePythonAttrs (_: {
                 # The pinned nixpkgs revision labels pre-2.3 source as 2.3.0.
