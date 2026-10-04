@@ -151,24 +151,20 @@ The three patterns, in order of preference:
 1. **Let the tool resolve it itself.** `git` needs no token — a credential
    helper answers each request with a freshly minted, short-lived credential.
    `aws` does the same through `credential_process`. Nothing to wire per shell.
-2. **Non-secret coordinates read in the `shellHook` with the vendor CLI.** See
-   `shells/tofu/default.nix`: it logs in with the ambient AppRole and reads
-   `TF_CLOUD_HOSTNAME` / `TF_CLOUD_ORGANIZATION` with `bao kv get`. Those two
-   are addresses, not credentials, so caching them is not a leak; the token
-   used to fetch them is scoped to the two calls and never exported. An empty
-   value aborts the shell. `TERRAKUBE_ENV_OPTIONAL=1` skips the block, for
-   offline `tofu validate` only. A real secret still must not be exported
-   here — direnv persists a `shellHook`'s environment to the same on-disk
-   cache as `.envrc`.
+2. **Non-secret coordinates resolved in the `shellHook`.** See
+   `shells/tofu/default.nix`: it takes `TF_CLOUD_HOSTNAME` /
+   `TF_CLOUD_ORGANIZATION` from the environment, or runs `TF_CLOUD_ENV_CMD`
+   to print them. Those two are addresses, not credentials, so caching them
+   is not a leak. An empty result from the command aborts the shell.
+   `TERRAKUBE_ENV_OPTIONAL=1` skips the block, for offline `tofu validate`
+   only. A real secret still must not be exported here — direnv persists a
+   `shellHook`'s environment to the same on-disk cache as `.envrc`.
 3. **A helper function for tools that only read the environment.** `gh` reads
    `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
-   `gh-read` (read scope) and `gh-claim` (per-repo write lease, released when
-   the shell exits). Both infer the target from the `origin` remote and mint per
-   call.
+   functions that mint a scoped token per call.
 
-Bootstrap credentials (vault address, role ids) are ambient — injected by the
-secrets manager into the environment the shell inherits — so no shell definition
-here contains one.
+Bootstrap credentials are read from the environment the shell inherits, so no
+shell definition here contains one.
 
 ## Adding a shell
 
