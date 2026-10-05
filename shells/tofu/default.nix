@@ -10,50 +10,54 @@
 {
   pkgs,
   pkgsUnstable ? pkgs,
+  extraPackages ? [ ],
 }:
 let
   awsShell = import ../aws/default.nix { inherit pkgs; };
 in
 pkgs.mkShell {
   inputsFrom = [ awsShell ];
-  buildInputs = with pkgs; [
-    # === Infrastructure as Code ===
-    terraform
-    # Unstable, not the stable channel. Terrakube workspaces declare a version
-    # constraint, and the CLI enforces it on any command that touches state
-    # LOCALLY — `state rm`, `state mv`, `taint`. Plans and applies run remotely
-    # and never noticed, so the shell looked fine right up until someone needed
-    # to correct state, and then the only offered way forward was
-    # `-ignore-remote-version`, which its own error text says may leave the
-    # workspace unusable. Stable carried 1.11.8 against a `~> 1.12.0`
-    # constraint. Drop this override once the stable channel catches up.
-    pkgsUnstable.opentofu
-    terraform-docs
-    tflint
+  buildInputs =
+    with pkgs;
+    [
+      # === Infrastructure as Code ===
+      terraform
+      # Unstable, not the stable channel. Terrakube workspaces declare a version
+      # constraint, and the CLI enforces it on any command that touches state
+      # LOCALLY — `state rm`, `state mv`, `taint`. Plans and applies run remotely
+      # and never noticed, so the shell looked fine right up until someone needed
+      # to correct state, and then the only offered way forward was
+      # `-ignore-remote-version`, which its own error text says may leave the
+      # workspace unusable. Stable carried 1.11.8 against a `~> 1.12.0`
+      # constraint. Drop this override once the stable channel catches up.
+      pkgsUnstable.opentofu
+      terraform-docs
+      tflint
 
-    # === Security & Compliance ===
-    # checkov and terrascan removed: checkov is broken in nixpkgs
-    # (pycep-parser fails to build with uv_build backend). Both hooks are
-    # also disabled in terraform-proxmox .pre-commit-config.yaml. Re-add
-    # when the upstream nixpkgs pycep-parser derivation is fixed.
-    tfsec
-    trivy
+      # === Security & Compliance ===
+      # checkov and terrascan removed: checkov is broken in nixpkgs
+      # (pycep-parser fails to build with uv_build backend). Both hooks are
+      # also disabled in terraform-proxmox .pre-commit-config.yaml. Re-add
+      # when the upstream nixpkgs pycep-parser derivation is fixed.
+      tfsec
+      trivy
 
-    # === Secrets Management ===
-    sops
-    age
-    openbao
+      # === Secrets Management ===
+      sops
+      age
+      openbao
 
-    # === Development ===
-    git
-    python3
+      # === Development ===
+      git
+      python3
 
-    # === Utilities ===
-    jq
-    yq
-    pre-commit
-    # NOTE: awscli2 + aws-vault inherited from awsShell via inputsFrom
-  ];
+      # === Utilities ===
+      jq
+      yq
+      pre-commit
+      # NOTE: awscli2 + aws-vault inherited from awsShell via inputsFrom
+    ]
+    ++ extraPackages;
 
   # Terrakube backend coordinates come from the environment: TF_CLOUD_HOSTNAME
   # and TF_CLOUD_ORGANIZATION. When either is unset and TF_CLOUD_ENV_CMD is
