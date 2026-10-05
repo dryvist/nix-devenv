@@ -9,6 +9,11 @@
     # shell needs a package the stable channel cannot yet supply.
     nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
 
+    homelab-contracts = {
+      url = "github:dryvist/homelab-contracts";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,6 +41,7 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
+      homelab-contracts,
       devenv,
       ...
     }@inputs:
@@ -68,6 +74,7 @@
             inherit system;
             config.allowUnfree = true;
           };
+          flowLock = homelab-contracts.packages.${system}.flow-lock;
         in
         {
           # Minimal shell for working on this repo
@@ -84,6 +91,7 @@
           ansible-apps = import ./shells/ansible/default.nix {
             inherit pkgs;
             extraPackages = [
+              flowLock
               pkgs.doppler
               # Vendor-neutral S3 client. Playbooks that publish or fetch
               # artifacts shell out to it, so without it declared here every
@@ -129,6 +137,7 @@
           tofu = import ./shells/tofu/default.nix {
             pkgs = pkgsUnfree;
             pkgsUnstable = pkgsUnstableUnfree;
+            extraPackages = [ flowLock ];
           };
           kubernetes = import ./shells/kubernetes/default.nix { inherit pkgs; };
           containers = import ./shells/containers/default.nix { inherit pkgs; };
