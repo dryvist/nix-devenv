@@ -7,10 +7,19 @@
     nixpkgs.follows = "channels/nixpkgs";
     # Only opentofu is taken from here — see channels/flake.nix for why.
     nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
+    homelab-contracts = {
+      url = "github:dryvist/homelab-contracts";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { nixpkgs, nixpkgs-unstable, ... }:
+    {
+      nixpkgs,
+      nixpkgs-unstable,
+      homelab-contracts,
+      ...
+    }:
     let
       systems = [
         "aarch64-darwin"
@@ -38,7 +47,12 @@
       devShells = forAllSystems (
         { pkgs, pkgsUnstable }:
         {
-          default = import ./default.nix { inherit pkgs pkgsUnstable; };
+          default = import ./default.nix {
+            inherit pkgs pkgsUnstable;
+            extraPackages = [
+              homelab-contracts.packages.${pkgs.stdenv.hostPlatform.system}.flow-lock
+            ];
+          };
         }
       );
     };
