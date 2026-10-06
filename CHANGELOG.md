@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.21.0](https://github.com/dryvist/nix-devenv/compare/v0.20.3...v0.21.0) (2026-10-06)
+
+
+### Features
+
+* **shells:** add flow-lock to infra environments ([ec65fab](https://github.com/dryvist/nix-devenv/commit/ec65fab03403bc6cbc8bf023245f80b301978fdd))
+* **shells:** add flow-lock to infra environments ([c385156](https://github.com/dryvist/nix-devenv/commit/c38515626ea1bf57d7cb8955a3da42087cb2cfa8))
+
 ## [0.20.3](https://github.com/dryvist/nix-devenv/compare/v0.20.2...v0.20.3) (2026-09-12)
 
 
