@@ -46,7 +46,7 @@
       ...
     }@inputs:
     let
-      devenvRoot = builtins.storePath "${./.}";
+      devenvRoot = "${./.}";
       systems = [
         "aarch64-darwin"
         "x86_64-darwin"
