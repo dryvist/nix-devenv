@@ -46,6 +46,7 @@
       ...
     }@inputs:
     let
+      devenvRoot = builtins.storePath "${./.}";
       systems = [
         "aarch64-darwin"
         "x86_64-darwin"
@@ -151,11 +152,17 @@
           # devenv shells (Python/AI development)
           ai-dev = devenv.lib.mkShell {
             inherit inputs pkgs;
-            modules = [ ./shells/ai-dev/default.nix ];
+            modules = [
+              ./shells/ai-dev/default.nix
+              { devenv.root = pkgs.lib.mkForce devenvRoot; }
+            ];
           };
           orchestrator = devenv.lib.mkShell {
             inherit inputs pkgs;
-            modules = [ ./shells/orchestrator/default.nix ];
+            modules = [
+              ./shells/orchestrator/default.nix
+              { devenv.root = pkgs.lib.mkForce (devenvRoot + "/shells/orchestrator"); }
+            ];
           };
         }
         // nixpkgs.lib.optionalAttrs (system == "aarch64-darwin") {
