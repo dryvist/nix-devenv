@@ -285,6 +285,8 @@
           python = import ./flake-modules/profiles/python.nix { inherit dev-hygiene; };
         };
 
+      checks = forAllSystems (system: self.devShells.${system});
+
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
     };
