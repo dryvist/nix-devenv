@@ -3,16 +3,8 @@
 # Skill orchestration: LangGraph, LlamaIndex, embeddings.
 # Uses uv for Python package management (reads pyproject.toml/uv.lock).
 { pkgs, ... }:
-let
-  pwd = builtins.getEnv "PWD";
-  pwdIsOrchestratorRoot =
-    pwd != ""
-    && builtins.pathExists (pwd + "/pyproject.toml")
-    &&
-      builtins.match ".*name = \"orchestrator\".*" (builtins.readFile (pwd + "/pyproject.toml")) != null;
-in
 {
-  devenv.root = if pwdIsOrchestratorRoot then pwd else builtins.toString ./.;
+  devenv.root = builtins.toString ./.;
 
   # System libraries required by Python packages (qwen-agent needs libsndfile)
   packages = [ pkgs.libsndfile ];
