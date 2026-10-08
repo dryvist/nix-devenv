@@ -8,6 +8,8 @@ let
   pwdIsFlakeRoot = pwd != "" && builtins.pathExists (pwd + "/flake.nix");
 in
 {
+  imports = [ ../../flake-modules/devenv-task-runner.nix ];
+
   devenv.root = if pwdIsFlakeRoot then pwd else builtins.toString ./.;
 
   languages.python = {

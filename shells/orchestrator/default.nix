@@ -12,6 +12,8 @@ let
       builtins.match ".*name = \"orchestrator\".*" (builtins.readFile (pwd + "/pyproject.toml")) != null;
 in
 {
+  imports = [ ../../flake-modules/devenv-task-runner.nix ];
+
   devenv.root = if pwdIsOrchestratorRoot then pwd else builtins.toString ./.;
 
   # System libraries required by Python packages (qwen-agent needs libsndfile)
