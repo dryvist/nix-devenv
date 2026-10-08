@@ -34,6 +34,7 @@ jobs:
     with:
       osv_scan: true
       nix_validate: true
+      nix_validate_timeout_minutes: 45
       filters: |
         nix:
           - '**.nix'
