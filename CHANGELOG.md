@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.21.1](https://github.com/dryvist/nix-devenv/compare/v0.21.0...v0.21.1) (2026-10-08)
+
+
+### Bug Fixes
+
+* **ci:** expose dev shells as Nix checks ([fae0807](https://github.com/dryvist/nix-devenv/commit/fae0807bb466b243147a38915528d676fc685ae8))
+* **ci:** expose dev shells as Nix checks ([95cc06f](https://github.com/dryvist/nix-devenv/commit/95cc06fedc89ea32fd2a0e837c5a2934851dc6e6))
+* **nix:** keep flake root context pure ([7e7c4a7](https://github.com/dryvist/nix-devenv/commit/7e7c4a7d8812f52069f64722a57d4e3c5d2ea9ce))
+* **nix:** preserve devenv shell root context ([40779dd](https://github.com/dryvist/nix-devenv/commit/40779ddbe54b4b5f763b1baade95a8902897e754))
+* **nix:** preserve path context for shell roots ([b4c507c](https://github.com/dryvist/nix-devenv/commit/b4c507cfebff9f8b7e3a1d586a8f2f1051fbeb7d))
+* **nix:** restore shell root discovery ([738c13a](https://github.com/dryvist/nix-devenv/commit/738c13ad9a2f73837e652199178a69b61b6ad854))
+* **nix:** retain source context in shell roots ([d8a4db4](https://github.com/dryvist/nix-devenv/commit/d8a4db44c1a71d7c1eb649d60cd9f85190f36f82))
+* **nix:** use the pinned devenv task runner ([02466b8](https://github.com/dryvist/nix-devenv/commit/02466b807d77747f658f8ee0eb475be5bd823555))
+
 ## [0.21.0](https://github.com/dryvist/nix-devenv/compare/v0.20.3...v0.21.0) (2026-10-06)
 
 
