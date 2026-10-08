@@ -4,7 +4,7 @@
 # Uses pip venv for Python packages (requirements installed automatically).
 { pkgs, ... }:
 {
-  devenv.root = builtins.toString (../..);
+  devenv.root = "${../..}";
 
   languages.python = {
     enable = true;

@@ -4,7 +4,7 @@
 # Uses uv for Python package management (reads pyproject.toml/uv.lock).
 { pkgs, ... }:
 {
-  devenv.root = builtins.toString ./.;
+  devenv.root = "${./.}";
 
   # System libraries required by Python packages (qwen-agent needs libsndfile)
   packages = [ pkgs.libsndfile ];
