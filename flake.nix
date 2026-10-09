@@ -146,6 +146,7 @@
           splunk-dev = import ./shells/splunk-dev/default.nix { inherit pkgs; };
           aws = import ./shells/aws/default.nix { inherit pkgs; };
           azure = import ./shells/azure/default.nix { inherit pkgs; };
+          database = import ./shells/database/default.nix { inherit pkgs; };
           windows = import ./shells/windows/default.nix { inherit pkgs; };
           server-admin = import ./shells/server-admin/default.nix { inherit pkgs; };
 

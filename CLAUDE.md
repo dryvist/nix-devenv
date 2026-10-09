@@ -116,6 +116,7 @@ nix flake init -t github:JacobPEvans/nix-devenv#mkshell
 | splunk-dev | Python 3.9 via uv (EOL exception) |
 | aws | awscli2, aws-vault |
 | azure | azure-cli |
+| database | psql (PostgreSQL client) |
 | windows | powershell (pwsh) — cross-platform PowerShell 7 for Windows automation and .ps1 scripting |
 | server-admin | out-of-band + bare-metal admin (IPMI/SoL, serial, PXE, ISO, net-diag, SMART) — packages below |
 | server-admin-linux | extends server-admin; adds nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp (Linux only) |
