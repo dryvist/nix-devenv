@@ -1,0 +1,62 @@
+{
+  "nodes": {
+    "channels": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable"
+      },
+      "locked": {
+        "path": "../../channels",
+        "type": "path"
+      },
+      "original": {
+        "path": "../../channels",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1791447531,
+        "narHash": "sha256-AsoGS8G2y3shwAtQWQhgV4Fa3uw6qzFejfqSblOGkhE=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "55afc4c3adc7194df3b96d43b7d18bf8131bfcfa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-26.05-darwin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1791366222,
+        "narHash": "sha256-o0N4g6uSOIppU7CGToNvGlMf5vC+B6O6ukFHKY/TKOY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "39ad350a0602fa0a58a544344e3e9187526ea45c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "channels": "channels",
+        "nixpkgs": [
+          "channels",
+          "nixpkgs"
+        ]
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
