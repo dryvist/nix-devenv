@@ -94,6 +94,7 @@ outputs = { nix-devenv, nixpkgs, ... }: {
 | `splunk-dev` | Python 3.9 via uv (EOL exception) |
 | `aws` | awscli2, aws-vault |
 | `azure` | azure-cli |
+| `database` | psql (PostgreSQL client) |
 | `windows` | powershell (pwsh 7) for Windows automation and `.ps1` |
 | `server-admin` | IPMI/SoL, VNC, serial, PXE, ISO/firmware, net + disk diag |
 | `server-admin-linux` | extends `server-admin`; adds nvme-cli, ethtool, tftp |
