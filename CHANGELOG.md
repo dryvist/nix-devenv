@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.0](https://github.com/dryvist/nix-devenv/compare/v0.21.1...v0.22.0) (2026-10-09)
+
+
+### Features
+
+* **shells:** add database shell with PostgreSQL client ([#189](https://github.com/dryvist/nix-devenv/issues/189)) ([4eacbea](https://github.com/dryvist/nix-devenv/commit/4eacbea5feab3de3df8ca4df9d9db0815d7dfdbc))
+
 ## [0.21.1](https://github.com/dryvist/nix-devenv/compare/v0.21.0...v0.21.1) (2026-10-08)
 
 
