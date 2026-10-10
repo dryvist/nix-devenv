@@ -10,7 +10,7 @@
     nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
 
     homelab-contracts = {
-      url = "github:dryvist/homelab-contracts";
+      url = "github:dryvist/homelab-contracts?ref=v5";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -31,7 +31,7 @@
     # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
     # so this tracks the default branch.
     dryvist-github = {
-      url = "github:dryvist/.github";
+      url = "github:dryvist/.github?ref=v1";
       flake = false;
     };
   };
