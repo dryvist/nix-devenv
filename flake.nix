@@ -76,19 +76,7 @@
             config.allowUnfree = true;
           };
           flowLock = homelab-contracts.packages.${system}.flow-lock;
-          # Shared Nix hook set (lib/pre-commit-hooks.nix) wired through git-hooks.nix.
-          # git-hooks.nix exports no lib for x86_64-darwin, so the wiring is skipped there.
-          preCommit =
-            if inputs.git-hooks.lib ? ${system} then
-              inputs.git-hooks.lib.${system}.run {
-                src = ./.;
-                hooks = import ./lib/pre-commit-hooks.nix { inherit pkgs; };
-              }
-            else
-              {
-                shellHook = "";
-                enabledPackages = [ ];
-              };
+          preCommit = import ./lib/pre-commit-shell.nix { inherit inputs system pkgs; };
         in
         {
           # Minimal shell for working on this repo; installs the pre-commit hooks on entry
