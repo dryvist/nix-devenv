@@ -10,7 +10,7 @@
     nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
 
     homelab-contracts = {
-      url = "github:dryvist/homelab-contracts";
+      url = "github:dryvist/homelab-contracts?ref=v5";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -31,7 +31,7 @@
     # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
     # so this tracks the default branch.
     dryvist-github = {
-      url = "github:dryvist/.github";
+      url = "github:dryvist/.github?ref=v1";
       flake = false;
     };
   };
@@ -76,15 +76,19 @@
             config.allowUnfree = true;
           };
           flowLock = homelab-contracts.packages.${system}.flow-lock;
+          preCommit = import ./lib/pre-commit-shell.nix { inherit inputs system pkgs; };
         in
         {
-          # Minimal shell for working on this repo
+          # Minimal shell for working on this repo; installs the pre-commit hooks on entry
           default = pkgs.mkShell {
+            inherit (preCommit) shellHook;
             packages = [
               pkgs.nixfmt-tree
               pkgs.nil
               pkgs.nix-diff
-            ];
+              pkgs.pre-commit
+            ]
+            ++ preCommit.enabledPackages;
           };
 
           # mkShell shells (infrastructure tooling)
