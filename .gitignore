@@ -4,3 +4,4 @@ result-*
 .devenv/
 .devenv.flake.nix
 .ansible/
+.pre-commit-config.yaml

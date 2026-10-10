@@ -76,15 +76,23 @@
             config.allowUnfree = true;
           };
           flowLock = homelab-contracts.packages.${system}.flow-lock;
+          # Shared Nix hook set (lib/pre-commit-hooks.nix) wired through git-hooks.nix.
+          preCommit = inputs.git-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+          };
         in
         {
-          # Minimal shell for working on this repo
+          # Minimal shell for working on this repo; installs the pre-commit hooks on entry
           default = pkgs.mkShell {
+            inherit (preCommit) shellHook;
             packages = [
               pkgs.nixfmt-tree
               pkgs.nil
               pkgs.nix-diff
-            ];
+              pkgs.pre-commit
+            ]
+            ++ preCommit.enabledPackages;
           };
 
           # mkShell shells (infrastructure tooling)
