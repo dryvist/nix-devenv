@@ -17,6 +17,11 @@
 #   python     — base + ruff + ruff-format + mypy
 #
 # Swap `base` below for the matching profile, then `direnv reload`.
+#
+# Hook ids versus the shared base set (precommit/templates/base.yaml): the
+# git-hooks.nix attribute names check-merge-conflicts, trim-trailing-whitespace
+# and detect-private-keys stand in for the shared ids check-merge-conflict,
+# trailing-whitespace and detect-private-key. deadnix and statix are extra.
 {
   description = "Development environment with org-wide pre-commit hooks";
 
