@@ -33,13 +33,3 @@ jobs:
     uses: dryvist/.github/.github/workflows/_ci-gate.yml@v1
     with:
       profile: nix
-      osv_scan: true
-      nix_validate: true
-      nix_validate_timeout_minutes: 45
-      filters: |
-        nix:
-          - '**.nix'
-          - 'flake.lock'
-        markdown:
-          - '**.md'
-          - '.markdownlint*'
