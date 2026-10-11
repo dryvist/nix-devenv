@@ -8,7 +8,7 @@
     # Only opentofu is taken from here — see channels/flake.nix for why.
     nixpkgs-unstable.follows = "channels/nixpkgs-unstable";
     homelab-contracts = {
-      url = "github:dryvist/homelab-contracts";
+      url = "github:dryvist/homelab-contracts?ref=v5";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
