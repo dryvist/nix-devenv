@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-devenv = {
-      url = "github:dryvist/nix-devenv";
+      url = "github:dryvist/nix-devenv?ref=v0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
