@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.0](https://github.com/dryvist/nix-devenv/compare/v0.23.0...v0.24.0) (2026-10-11)
+
+
+### Features
+
+* **templates:** add the org CI Gate caller to the with-hooks template ([#226](https://github.com/dryvist/nix-devenv/issues/226)) ([33fdd9d](https://github.com/dryvist/nix-devenv/commit/33fdd9d48f79283321926471299feb5fb31386d0))
+
 ## [0.23.0](https://github.com/dryvist/nix-devenv/compare/v0.22.0...v0.23.0) (2026-10-10)
 
 
