@@ -62,7 +62,7 @@
       # The nixpkgs channel is pinned once in channels/flake.nix; this flake
       # and every shell follow it via channels.url + nixpkgs.follows.
       # For isolated locks, use ?dir= pattern instead:
-      #   nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
+      #   nix develop github:dryvist/nix-devenv?dir=shells/tofu
       devShells = forAllSystems (
         system:
         let
@@ -193,9 +193,9 @@
 
       # === Scaffolding templates ===
       #
-      # nix flake init -t github:JacobPEvans/nix-devenv#mkshell
-      # nix flake init -t github:JacobPEvans/nix-devenv#devenv
-      # nix flake init -t github:JacobPEvans/nix-devenv#with-hooks
+      # nix flake init -t github:dryvist/nix-devenv#mkshell
+      # nix flake init -t github:dryvist/nix-devenv#devenv
+      # nix flake init -t github:dryvist/nix-devenv#with-hooks
       templates = {
         devenv = {
           path = ./templates/devenv;

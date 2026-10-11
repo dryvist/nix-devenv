@@ -1,7 +1,7 @@
 # devenv template — module-based dev environment with services support
 #
 # Usage:
-#   nix flake init -t github:JacobPEvans/nix-devenv#devenv
+#   nix flake init -t github:dryvist/nix-devenv#devenv
 #   nix develop --impure
 {
   description = "Development environment (devenv)";
