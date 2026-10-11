@@ -41,10 +41,10 @@ Consumers select a specific shell's lock using Nix's `?dir=` parameter:
 
 ```bash
 # mkShell shell — ~2 node lock (just nixpkgs)
-nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
+nix develop github:dryvist/nix-devenv?dir=shells/tofu
 
 # devenv shell — ~28 node lock (nixpkgs + devenv tree)
-nix develop github:JacobPEvans/nix-devenv?dir=shells/ai-dev
+nix develop github:dryvist/nix-devenv?dir=shells/ai-dev
 ```
 
 This means mkShell consumers never pay for devenv's dependency tree.
@@ -54,7 +54,7 @@ This means mkShell consumers never pay for devenv's dependency tree.
 ### Pattern A — Direct use with isolated lock (preferred)
 
 ```bash
-nix develop github:JacobPEvans/nix-devenv?dir=shells/tofu
+nix develop github:dryvist/nix-devenv?dir=shells/tofu
 ```
 
 Each shell resolves against its OWN flake.lock. No bloat leakage.
@@ -63,7 +63,7 @@ Each shell resolves against its OWN flake.lock. No bloat leakage.
 
 ```bash
 # .envrc
-use flake github:JacobPEvans/nix-devenv?dir=shells/orchestrator --impure
+use flake github:dryvist/nix-devenv?dir=shells/orchestrator --impure
 ```
 
 direnv activates the remote shell with its own lock. No local flake.nix needed.
@@ -71,7 +71,7 @@ direnv activates the remote shell with its own lock. No local flake.nix needed.
 ### Pattern C — Root flake (convenience)
 
 ```bash
-nix develop github:JacobPEvans/nix-devenv#tofu
+nix develop github:dryvist/nix-devenv#tofu
 ```
 
 Uses the root flake.lock (larger — carries devenv). Fine for quick one-off use.
@@ -79,7 +79,7 @@ Uses the root flake.lock (larger — carries devenv). Fine for quick one-off use
 ### Pattern D — Local flake.nix with composition
 
 ```nix
-inputs.nix-devenv.url = "github:JacobPEvans/nix-devenv";
+inputs.nix-devenv.url = "github:dryvist/nix-devenv";
 inputs.nix-devenv.inputs.nixpkgs.follows = "nixpkgs";
 
 outputs = { nix-devenv, nixpkgs, ... }: {
@@ -98,8 +98,8 @@ Consumer's flake.lock gains nix-devenv's tree — only repos that CHOOSE to impo
 ### Pattern E — Template scaffolding
 
 ```bash
-nix flake init -t github:JacobPEvans/nix-devenv#devenv
-nix flake init -t github:JacobPEvans/nix-devenv#mkshell
+nix flake init -t github:dryvist/nix-devenv#devenv
+nix flake init -t github:dryvist/nix-devenv#mkshell
 ```
 
 ## Available Shells
@@ -184,7 +184,7 @@ nix.settings = {
 
 | Repo | Purpose |
 | ------ | --------- |
-| [nix-darwin](https://github.com/JacobPEvans/nix-darwin) | macOS system config |
-| [nix-home](https://github.com/JacobPEvans/nix-home) | User dev environment |
-| [nix-ai](https://github.com/JacobPEvans/nix-ai) | AI coding tools |
+| [nix-darwin](https://github.com/dryvist/nix-darwin) | macOS system config |
+| [nix-home](https://github.com/dryvist/nix-home) | User dev environment |
+| [nix-ai](https://github.com/dryvist/nix-ai) | AI coding tools |
 | **nix-devenv** (this repo) | Development shells |

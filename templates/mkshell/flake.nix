@@ -1,7 +1,7 @@
 # mkShell template — lightweight dev environment with org-wide pre-commit hooks
 #
 # Usage:
-#   nix flake init -t github:JacobPEvans/nix-devenv#mkshell
+#   nix flake init -t github:dryvist/nix-devenv#mkshell
 #   nix develop
 {
   description = "Development environment";

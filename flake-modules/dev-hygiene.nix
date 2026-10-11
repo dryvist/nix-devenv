@@ -13,7 +13,7 @@
 #
 # Consumer:
 #   {
-#     inputs.nix-devenv.url = "github:JacobPEvans/nix-devenv";
+#     inputs.nix-devenv.url = "github:dryvist/nix-devenv";
 #     outputs = inputs@{ flake-parts, ... }:
 #       flake-parts.lib.mkFlake { inherit inputs; } {
 #         imports = [ inputs.nix-devenv.flakeModules.dev-hygiene ];
