@@ -29,7 +29,7 @@ No install step of its own — consume a shell directly by flake reference:
 
 ```bash
 # Enter the Terraform shell with its own minimal lock (~2 nodes: just nixpkgs)
-nix develop github:dryvist/nix-devenv?dir=shells/tofu
+nix develop "github:dryvist/nix-devenv?dir=shells/tofu&ref=vN"
 ```
 
 The `?dir=<shell>` selector resolves against **that shell's** `flake.lock`, so
@@ -41,19 +41,19 @@ The `?dir=<shell>` selector resolves against **that shell's** `flake.lock`, so
 
 ```bash
 # A: Direct use with an isolated lock (preferred)
-nix develop github:dryvist/nix-devenv?dir=shells/tofu
+nix develop "github:dryvist/nix-devenv?dir=shells/tofu&ref=vN"
 
-# B: Pin it in a project's .envrc — direnv activates the remote shell
-echo 'use flake github:dryvist/nix-devenv?dir=shells/orchestrator --impure' \
+# B: In a project whose flake.nix pins nix-devenv (Pattern D), .envrc loads that local flake
+echo 'use flake .' \
   > .envrc
 
 # C: Root flake (convenience) — larger root lock, fine for one-offs
-nix develop github:dryvist/nix-devenv#tofu
+nix develop "github:dryvist/nix-devenv?ref=vN#tofu"
 
 # E: Scaffold a new repo's dev environment from a template
-nix flake init -t github:dryvist/nix-devenv#mkshell    # lightweight mkShell
-nix flake init -t github:dryvist/nix-devenv#devenv     # full devenv
-nix flake init -t github:dryvist/nix-devenv#with-hooks # dev shell with pre-commit hooks
+nix flake init -t "github:dryvist/nix-devenv?ref=vN#mkshell"    # lightweight mkShell
+nix flake init -t "github:dryvist/nix-devenv?ref=vN#devenv"     # full devenv
+nix flake init -t "github:dryvist/nix-devenv?ref=vN#with-hooks" # dev shell with pre-commit hooks
 ```
 
 ### Compose modules into your own shell (Pattern D)
@@ -62,7 +62,7 @@ Importing this repo as a flake input adds its tree to **your** lock — only rep
 that choose to import pay for it:
 
 ```nix
-inputs.nix-devenv.url = "github:dryvist/nix-devenv";
+inputs.nix-devenv.url = "github:dryvist/nix-devenv?ref=vN";
 inputs.nix-devenv.inputs.nixpkgs.follows = "nixpkgs";
 
 outputs = { nix-devenv, nixpkgs, ... }: {
