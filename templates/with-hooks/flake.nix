@@ -1,7 +1,7 @@
 # with-hooks template — dev environment + org-wide pre-commit hooks
 #
 # Usage:
-#   nix flake init -t github:JacobPEvans/nix-devenv#with-hooks
+#   nix flake init -t github:dryvist/nix-devenv#with-hooks
 #   direnv allow              # picks up the devShell
 #   pre-commit install        # done by git-hooks.nix shellHook automatically
 #
