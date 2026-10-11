@@ -79,7 +79,7 @@ Uses the root flake.lock (larger — carries devenv). Fine for quick one-off use
 ### Pattern D — Local flake.nix with composition
 
 ```nix
-inputs.nix-devenv.url = "github:dryvist/nix-devenv";
+inputs.nix-devenv.url = "github:dryvist/nix-devenv?ref=v<major>";
 inputs.nix-devenv.inputs.nixpkgs.follows = "nixpkgs";
 
 outputs = { nix-devenv, nixpkgs, ... }: {
