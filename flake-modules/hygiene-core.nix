@@ -3,7 +3,7 @@
 # Wires together the org-wide hook set that EVERY repo wants, with no
 # formatter opinion baked in:
 # * git-hooks       — pre-commit hooks from lib.mkPreCommitHooks (file
-#                     hygiene, nix lints, markdownlint-cli2)
+#                     hygiene, nix lints, markdownlint-cli2, commit subjects)
 # * dryvist/.github — zizmor's `unpinned-uses` trusted-publisher policy
 #                     pulled in as `--config`, so consumers don't ship
 #                     their own .github/zizmor.yml
@@ -32,6 +32,10 @@
   perSystem =
     { pkgs, ... }:
     {
+      pre-commit.settings.default_install_hook_types = [
+        "pre-commit"
+        "commit-msg"
+      ];
       pre-commit.settings.hooks =
         let
           hooks = mkPreCommitHooks { inherit pkgs; };
