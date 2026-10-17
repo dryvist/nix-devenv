@@ -32,10 +32,6 @@
   perSystem =
     { pkgs, ... }:
     {
-      pre-commit.settings.default_install_hook_types = [
-        "pre-commit"
-        "commit-msg"
-      ];
       pre-commit.settings.hooks =
         let
           hooks = mkPreCommitHooks { inherit pkgs; };

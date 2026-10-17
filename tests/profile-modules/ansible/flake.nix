@@ -47,11 +47,8 @@
                 "title-match-regex.regex=${pattern}"
                 "--msg-filename"
               ];
-            assert
-              config.pre-commit.settings.default_install_hook_types == [
-                "pre-commit"
-                "commit-msg"
-              ];
+            # git-hooks.nix installs one git hook per stage that an enabled hook uses.
+            assert builtins.elem "commit-msg" config.pre-commit.settings.installStages;
             pkgs.runCommand "conventional-commit-subject-contract" { } "touch $out";
         };
     };
