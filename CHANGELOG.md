@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.0](https://github.com/dryvist/nix-devenv/compare/v0.24.0...v0.25.0) (2026-10-17)
+
+
+### Features
+
+* **hooks:** reject non-conventional commit subjects at commit-msg ([#242](https://github.com/dryvist/nix-devenv/issues/242)) ([21091d4](https://github.com/dryvist/nix-devenv/commit/21091d4317b07d32893949baf14b2a161fb9318a))
+
 ## [0.24.0](https://github.com/dryvist/nix-devenv/compare/v0.23.0...v0.24.0) (2026-10-11)
 
 
