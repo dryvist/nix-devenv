@@ -34,6 +34,10 @@
       url = "github:dryvist/.github?ref=v1";
       flake = false;
     };
+    tofu-github = {
+      url = "github:dryvist/tofu-github?ref=v1.29.0";
+      flake = false;
+    };
   };
 
   outputs =
@@ -43,6 +47,7 @@
       nixpkgs-unstable,
       homelab-contracts,
       devenv,
+      tofu-github,
       ...
     }@inputs:
     let
@@ -54,6 +59,7 @@
         "aarch64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+      mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs tofu-github; };
     in
     {
       # === Pre-built shells ===
@@ -235,7 +241,7 @@
       #     // {
       #       # Per-repo overrides (e.g. treefmt with local wrapper).
       #     };
-      lib.mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+      lib.mkPreCommitHooks = mkPreCommitHooks;
 
       # === Flake-parts modules ===
       #
@@ -268,7 +274,7 @@
         let
           hygiene-core = import ./flake-modules/hygiene-core.nix {
             inherit (inputs) git-hooks dryvist-github;
-            mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+            inherit mkPreCommitHooks;
           };
           dev-hygiene = import ./flake-modules/dev-hygiene.nix {
             inherit (inputs) treefmt-nix;

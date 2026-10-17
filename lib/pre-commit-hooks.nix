@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, tofu-github }:
 # Org-wide pre-commit hook defaults for cachix/git-hooks.nix consumers.
 #
 # Consumers import the result into `pre-commit.settings.hooks`:
@@ -11,13 +11,18 @@
 #       # treefmt-nix config).
 #     };
 #
-# Why a function, not a static attrset: hooks that shell out to a Nix
-# package (markdownlint-cli2) need a `pkgs` reference resolved against
+# Why a function, not a static attrset: hooks use packages resolved against
 # the consumer's nixpkgs pin, not nix-devenv's.
 #
 # treefmt is intentionally NOT included: its `package` field must point
 # at the consumer's locally-configured treefmt wrapper, which only the
 # consumer can name.
+let
+  # Start-anchored, no trailing $: gitlint and GitHub match the whole message.
+  commitMessagePattern = pkgs.lib.removeSuffix "\n" (
+    pkgs.lib.fileContents "${tofu-github}/config/commit-message-pattern.txt"
+  );
+in
 {
   # Nix-source hygiene
   deadnix.enable = true;
@@ -54,6 +59,24 @@
     entry = "${pkgs.markdownlint-cli2}/bin/markdownlint-cli2";
     files = "\\.md$";
     excludes = [ "^CHANGELOG\\.md$" ];
+    language = "system";
+    pass_filenames = true;
+  };
+
+  # Conventional Commit subject validation on the message file. gitlint's
+  # default merge-commit ignore keeps git-flow merge commits out of this rule.
+  conventional-commit-subject = {
+    enable = true;
+    name = "conventional-commit-subject";
+    entry = "${pkgs.gitlint}/bin/gitlint";
+    args = [
+      "--ignore"
+      "T1,T2,T3,T4,T5,T6,T8,B1,B2,B3,B4,B5,B6,B7,B8"
+      "-c"
+      "title-match-regex.regex=${commitMessagePattern}"
+      "--msg-filename"
+    ];
+    stages = [ "commit-msg" ];
     language = "system";
     pass_filenames = true;
   };
