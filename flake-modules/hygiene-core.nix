@@ -4,7 +4,7 @@
 # formatter opinion baked in:
 # * git-hooks       — pre-commit hooks from lib.mkPreCommitHooks (file
 #                     hygiene, nix lints, markdownlint-cli2, commit subjects)
-# * dryvist/.github — zizmor's `unpinned-uses` trusted-publisher policy
+# * JacobPEvans/.github — zizmor's `unpinned-uses` trusted-publisher policy
 #                     pulled in as `--config`, so consumers don't ship
 #                     their own .github/zizmor.yml
 #
@@ -38,7 +38,7 @@
         in
         hooks
         // {
-          # Append the org-wide zizmor policy from dryvist/.github to the
+          # Append the org-wide zizmor policy from JacobPEvans/.github to the
           # args mkPreCommitHooks already defines (persona / severity /
           # confidence). `//` is a SHALLOW merge, so the zizmor attrset must
           # be merged explicitly — `zizmor.args = […]` alone would replace

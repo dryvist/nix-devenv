@@ -13,7 +13,7 @@
 #   docs       — Markdown/MDX docs: hygiene-core + markdownlint (.md/.mdx),
 #                NO treefmt/prettier (won't reformat authored prose)
 #   terraform  — base + terraform-format/validate + tflint
-#   ansible    — base + ansible-lint + yamllint (canonical configs from dryvist/.github)
+#   ansible    — base + ansible-lint + yamllint (canonical configs from JacobPEvans/.github)
 #   python     — base + ruff + ruff-format + mypy
 #
 # Swap `base` below for the matching profile, then `direnv reload`.

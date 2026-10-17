@@ -28,10 +28,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
+    # Sources the org-wide zizmor.yml policy. JacobPEvans/.github#5 merged,
     # so this tracks the default branch.
     dryvist-github = {
-      url = "github:dryvist/.github?ref=v1";
+      url = "github:JacobPEvans/.github?ref=v1";
       flake = false;
     };
     tofu-github = {
@@ -246,7 +246,7 @@
       # === Flake-parts modules ===
       #
       # `dev-hygiene` wires treefmt-nix + git-hooks + zizmor (with the
-      # org-wide policy from dryvist/.github) into a flake-parts consumer
+      # org-wide policy from JacobPEvans/.github) into a flake-parts consumer
       # in one import. See flake-modules/dev-hygiene.nix for usage.
       #
       # Profile modules layer language-specific hooks on top of
@@ -281,7 +281,7 @@
             inherit hygiene-core;
           };
           # Materializes nix-store paths to the canonical lint configs in
-          # dryvist/.github at precommit/configs/. terraform and ansible
+          # JacobPEvans/.github at precommit/configs/. terraform and ansible
           # profiles consume this so consumer repos can delete their
           # per-repo .tflint.hcl / .ansible-lint / .yamllint.yml copies.
           sharedConfigs = import ./lib/fetch-shared-configs.nix {

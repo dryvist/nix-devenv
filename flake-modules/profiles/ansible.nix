@@ -6,9 +6,9 @@
 #
 # Enabled on top of base:
 # * ansible-lint — full ansible-lint pass; reads canonical config from
-#                  dryvist/.github via sharedConfigs.ansible-lint
+#                  JacobPEvans/.github via sharedConfigs.ansible-lint
 # * yamllint     — YAML structure/style check; reads canonical config from
-#                  dryvist/.github via sharedConfigs.yamllint
+#                  JacobPEvans/.github via sharedConfigs.yamllint
 #
 # Consumer repos can delete their per-repo `.ansible-lint` and
 # `.yamllint.yml` because both hooks point at the canonical configs in
