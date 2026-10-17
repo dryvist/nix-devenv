@@ -10,10 +10,8 @@
   # editing the same string in 13+ files.
   description = "Single source of truth for the nixpkgs channel in nix-devenv.";
 
-  # Channel branch = the intended major-version pin. Renovate cannot bump
-  # this: a branch's reference never changes, only the commits on it do, so
-  # Renovate has nothing to diff. deps-flake-lock.yml relocks this sub-flake and
-  # then the root, whole-file, weekly.
+  # Channel branch = the intended major-version pin. Renovate owns lockfile
+  # updates through the shared Nix preset; do not edit flake.lock by hand.
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
 
   # Escape hatch for tools whose usable version outruns the stable channel.

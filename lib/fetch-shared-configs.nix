@@ -1,5 +1,5 @@
 # Pure helper that returns nix-store paths to the canonical lint configs
-# in dryvist/.github at `precommit/configs/`. Consumed by profile flake
+# in JacobPEvans/.github at `precommit/configs/`. Consumed by profile flake
 # modules so terraform / ansible / python repos can delete their per-repo
 # copies of `.tflint.hcl`, `.ansible-lint`, `.yamllint.yml`.
 #

@@ -19,7 +19,7 @@
 #                 runs `--hook-stage pre-commit`.
 #
 # ┌──────────────────────────── KEEP IN SYNC ────────────────────────────┐
-# │ This profile and dryvist/.github precommit/templates/python.yaml are  │
+# │ This profile and JacobPEvans/.github precommit/templates/python.yaml are  │
 # │ the SAME hook set in two encodings — change BOTH together (no         │
 # │ generator yet). The pyright/pytest *entries* differ by design: the    │
 # │ YAML calls .venv/bin/{pyright,pytest}; here pyright is the git-hooks   │

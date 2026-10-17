@@ -10,7 +10,7 @@
 # * terraform-validate — `terraform validate` per module (initializes a
 #                        local backend; safe in pre-commit)
 # * tflint             — Terraform linter; reads canonical config from
-#                        dryvist/.github via sharedConfigs.tflint, so
+#                        JacobPEvans/.github via sharedConfigs.tflint, so
 #                        consumer repos can delete their local .tflint.hcl
 #
 # checkov is intentionally not in this profile: only ~3 of the inventoried
