@@ -16,7 +16,6 @@ pkgs.mkShell {
 
   buildInputs = with pkgs; [
     uv # Provides Python 3.9 on-demand
-    git
   ];
 
   shellHook = ''

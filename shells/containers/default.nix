@@ -16,7 +16,6 @@ pkgs.mkShell {
     skopeo
 
     # === Utilities ===
-    git
     python3
     jq
     yq

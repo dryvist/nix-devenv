@@ -48,7 +48,6 @@
 
                 # Add your configuration here
                 packages = with pkgs; [
-                  git
                   jq
                   pre-commit
                 ] ++ config.pre-commit.settings.enabledPackages;
