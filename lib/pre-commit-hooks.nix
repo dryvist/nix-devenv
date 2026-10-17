@@ -1,4 +1,4 @@
-{ pkgs, commitMessagePattern }:
+{ pkgs, tofu-github }:
 # Org-wide pre-commit hook defaults for cachix/git-hooks.nix consumers.
 #
 # Consumers import the result into `pre-commit.settings.hooks`:
@@ -17,6 +17,12 @@
 # treefmt is intentionally NOT included: its `package` field must point
 # at the consumer's locally-configured treefmt wrapper, which only the
 # consumer can name.
+let
+  # Start-anchored, no trailing $: gitlint and GitHub match the whole message.
+  commitMessagePattern = pkgs.lib.removeSuffix "\n" (
+    pkgs.lib.fileContents "${tofu-github}/config/commit-message-pattern.txt"
+  );
+in
 {
   # Nix-source hygiene
   deadnix.enable = true;

@@ -34,7 +34,6 @@
       url = "github:dryvist/.github?ref=v1";
       flake = false;
     };
-    # Source-only Conventional Commit subject regex shared with the org rulesets.
     tofu-github = {
       url = "github:dryvist/tofu-github?ref=v1.29.0";
       flake = false;
@@ -60,14 +59,7 @@
         "aarch64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
-      commitMessagePattern = nixpkgs.lib.removeSuffix "\n" (
-        nixpkgs.lib.fileContents "${tofu-github}/config/commit-message-pattern.txt"
-      );
-      mkPreCommitHooks =
-        { pkgs }:
-        import ./lib/pre-commit-hooks.nix {
-          inherit pkgs commitMessagePattern;
-        };
+      mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs tofu-github; };
     in
     {
       # === Pre-built shells ===
@@ -90,14 +82,7 @@
             config.allowUnfree = true;
           };
           flowLock = homelab-contracts.packages.${system}.flow-lock;
-          preCommit = import ./lib/pre-commit-shell.nix {
-            inherit
-              inputs
-              system
-              pkgs
-              commitMessagePattern
-              ;
-          };
+          preCommit = import ./lib/pre-commit-shell.nix { inherit inputs system pkgs; };
         in
         {
           # Minimal shell for working on this repo; installs the pre-commit hooks on entry
