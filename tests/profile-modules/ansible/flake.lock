@@ -81,11 +81,11 @@
     "dryvist-github": {
       "flake": false,
       "locked": {
-        "lastModified": 1792268011,
-        "narHash": "sha256-6CswH2jJud7ouUUCqbepiDWL4hR2KwmsKTr5rC8xg40=",
+        "lastModified": 1792326460,
+        "narHash": "sha256-lfBvsA5WsLoOteWi0SVBbVya8oudgA1ujZN3reDvxW4=",
         "owner": "JacobPEvans",
         "repo": ".github",
-        "rev": "be2c3eb47b3119e742b4e0bf712f1c0ada56ec2d",
+        "rev": "5255012650e0fdca47d8d5473a62f4ba6bbe58f5",
         "type": "github"
       },
       "original": {
