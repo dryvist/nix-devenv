@@ -41,11 +41,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791667192,
-        "narHash": "sha256-GQeMZ5nYfSs3gCXR8ozIgizQRHoSuB1VP17b54H1hxk=",
+        "lastModified": 1792279760,
+        "narHash": "sha256-Me8RoZhEDbhbK4NO+8CHv2gNVl3LneS6nInoJxB5arU=",
         "owner": "dryvist",
         "repo": "homelab-contracts",
-        "rev": "6bfe5b765e8b3acfbd6fe42d00e20a08133f3d39",
+        "rev": "21b9c178666b721f6653b4142db8d2879bb5ca7f",
         "type": "github"
       },
       "original": {
@@ -57,11 +57,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1785067121,
-        "narHash": "sha256-rdJdWxAcg5fnntU4DjPivPdVEN4F+VJavw+UWpEMeUI=",
+        "lastModified": 1792208400,
+        "narHash": "sha256-c+NgsnPFEfvGOLxJEQkxkpOESw7mPjnh/H9qDVEWFkQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "329c3d2af6d1b618705150ea39f72c15eb4e613e",
+        "rev": "42966a9c76f2cdb95b108c9fac939a27b0b8f2c5",
         "type": "github"
       },
       "original": {
@@ -73,11 +73,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1785747939,
-        "narHash": "sha256-D740uKsMbgsfK2oaDenJLLPIZfq7W0/g4KN/Fls8eKs=",
+        "lastModified": 1792116957,
+        "narHash": "sha256-EjZqHKObBfIOeHZnMRVV87HB3pPq/WBkmRJWyFxmZu8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "104240a772428cc2e20d8fd86c9ddbb886bbaff2",
+        "rev": "f20cd90e28fe0403873f473b29e42662cd86e8c4",
         "type": "github"
       },
       "original": {

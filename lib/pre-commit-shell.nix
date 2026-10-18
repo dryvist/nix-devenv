@@ -9,7 +9,10 @@
 if inputs.git-hooks.lib ? ${system} then
   inputs.git-hooks.lib.${system}.run {
     src = ../.;
-    hooks = import ./pre-commit-hooks.nix { inherit pkgs; };
+    hooks = import ./pre-commit-hooks.nix {
+      inherit pkgs;
+      inherit (inputs) tofu-github;
+    };
   }
 else
   {

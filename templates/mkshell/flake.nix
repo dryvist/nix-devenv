@@ -36,7 +36,6 @@
             inputsFrom = [ config.pre-commit.devShell ];
             buildInputs = with pkgs; [
               # Add your packages here
-              git
               jq
             ];
 

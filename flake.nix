@@ -28,10 +28,14 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Sources the org-wide zizmor.yml policy. dryvist/.github#5 merged,
+    # Sources the org-wide zizmor.yml policy. JacobPEvans/.github#5 merged,
     # so this tracks the default branch.
     dryvist-github = {
-      url = "github:dryvist/.github?ref=v1";
+      url = "github:JacobPEvans/.github?ref=v1";
+      flake = false;
+    };
+    tofu-github = {
+      url = "github:dryvist/tofu-github?ref=v1.29.0";
       flake = false;
     };
   };
@@ -43,6 +47,7 @@
       nixpkgs-unstable,
       homelab-contracts,
       devenv,
+      tofu-github,
       ...
     }@inputs:
     let
@@ -54,6 +59,7 @@
         "aarch64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+      mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs tofu-github; };
     in
     {
       # === Pre-built shells ===
@@ -235,12 +241,12 @@
       #     // {
       #       # Per-repo overrides (e.g. treefmt with local wrapper).
       #     };
-      lib.mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+      lib.mkPreCommitHooks = mkPreCommitHooks;
 
       # === Flake-parts modules ===
       #
       # `dev-hygiene` wires treefmt-nix + git-hooks + zizmor (with the
-      # org-wide policy from dryvist/.github) into a flake-parts consumer
+      # org-wide policy from JacobPEvans/.github) into a flake-parts consumer
       # in one import. See flake-modules/dev-hygiene.nix for usage.
       #
       # Profile modules layer language-specific hooks on top of
@@ -268,14 +274,14 @@
         let
           hygiene-core = import ./flake-modules/hygiene-core.nix {
             inherit (inputs) git-hooks dryvist-github;
-            mkPreCommitHooks = { pkgs }: import ./lib/pre-commit-hooks.nix { inherit pkgs; };
+            inherit mkPreCommitHooks;
           };
           dev-hygiene = import ./flake-modules/dev-hygiene.nix {
             inherit (inputs) treefmt-nix;
             inherit hygiene-core;
           };
           # Materializes nix-store paths to the canonical lint configs in
-          # dryvist/.github at precommit/configs/. terraform and ansible
+          # JacobPEvans/.github at precommit/configs/. terraform and ansible
           # profiles consume this so consumer repos can delete their
           # per-repo .tflint.hcl / .ansible-lint / .yamllint.yml copies.
           sharedConfigs = import ./lib/fetch-shared-configs.nix {
