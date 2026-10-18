@@ -32,7 +32,6 @@ pkgs.mkShell {
     actionlint # GitHub Actions workflow linter — moved from nix-home global env (project-scoped tool)
 
     # === Utilities ===
-    git
     jq
     yq
   ];

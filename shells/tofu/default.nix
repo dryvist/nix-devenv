@@ -48,7 +48,6 @@ pkgs.mkShell {
       openbao
 
       # === Development ===
-      git
       python3
 
       # === Utilities ===
