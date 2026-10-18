@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.1](https://github.com/dryvist/nix-devenv/compare/v0.25.0...v0.25.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **shells:** use the system git instead of a pinned git ([#248](https://github.com/dryvist/nix-devenv/issues/248)) ([5e951d1](https://github.com/dryvist/nix-devenv/commit/5e951d194a08d6a7cf86e2ea622af57f05a21084))
+
 ## [0.25.0](https://github.com/dryvist/nix-devenv/compare/v0.24.0...v0.25.0) (2026-10-17)
 
 
