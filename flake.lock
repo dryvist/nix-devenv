@@ -63,11 +63,11 @@
     "dryvist-github": {
       "flake": false,
       "locked": {
-        "lastModified": 1792327415,
-        "narHash": "sha256-plmxaK1IrN5nDssGEp9RzwyBoPHyQYazZ9GwGnZYW3g=",
+        "lastModified": 1792347836,
+        "narHash": "sha256-m6SQjUxHkILFoi8LXuUcnrotO5K4kh8NVwEg2v1LhJ4=",
         "owner": "JacobPEvans",
         "repo": ".github",
-        "rev": "b6c7d9be8f93af36e215831b2d28a60e13ab2227",
+        "rev": "9ec96ccce0784075e23965a54ec45c9bb4c64101",
         "type": "github"
       },
       "original": {
@@ -219,11 +219,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792279760,
-        "narHash": "sha256-Me8RoZhEDbhbK4NO+8CHv2gNVl3LneS6nInoJxB5arU=",
+        "lastModified": 1792338902,
+        "narHash": "sha256-vw5kZX833XFfW9wb8kScw7fNK5If5xx+CZGW3pGvjPA=",
         "owner": "dryvist",
         "repo": "homelab-contracts",
-        "rev": "21b9c178666b721f6653b4142db8d2879bb5ca7f",
+        "rev": "ba20d1784f8101d7bc67c080d62d006002ecc498",
         "type": "github"
       },
       "original": {
