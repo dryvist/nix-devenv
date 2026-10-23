@@ -303,7 +303,20 @@
           python = import ./flake-modules/profiles/python.nix { inherit dev-hygiene; };
         };
 
-      checks = forAllSystems (system: self.devShells.${system});
+      checks = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          hooks = mkPreCommitHooks { inherit pkgs; };
+        in
+        self.devShells.${system}
+        // {
+          private-identifier-hook = import ./tests/private-identifier-hook.nix {
+            inherit pkgs;
+            hook = hooks.private-identifiers;
+          };
+        }
+      );
 
       # Formatter
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
