@@ -121,9 +121,10 @@ nix flake init -t github:dryvist/nix-devenv#mkshell
 | server-admin | out-of-band + bare-metal admin (IPMI/SoL, serial, PXE, ISO, net-diag, SMART) — packages below |
 | server-admin-linux | extends server-admin; adds nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp (Linux only) |
 
-`server-admin` packages: ipmitool, freeipmi; tigervnc; picocom, minicom, tio;
+`server-admin` packages: ipmitool, freeipmi; picocom, minicom, tio;
 dnsmasq; xorriso, cabextract; nmap, tcpdump, mtr, iperf3, wakeonlan;
 smartmontools; expect, sshpass.
+`server-admin-linux` adds tigervnc and Linux-only storage, NIC, and TFTP tools.
 
 ### devenv (Python/AI)
 
