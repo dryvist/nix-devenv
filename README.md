@@ -96,8 +96,8 @@ outputs = { nix-devenv, nixpkgs, ... }: {
 | `azure` | azure-cli |
 | `database` | psql (PostgreSQL client) |
 | `windows` | powershell (pwsh 7) for Windows automation and `.ps1` |
-| `server-admin` | IPMI/SoL, VNC, serial, PXE, ISO/firmware, net + disk diag |
-| `server-admin-linux` | extends `server-admin`; adds nvme-cli, ethtool, tftp |
+| `server-admin` | IPMI/SoL, serial, PXE, ISO/firmware, net + disk diag |
+| `server-admin-linux` | extends `server-admin`; adds VNC, nvme-cli, ethtool, tftp |
 
 `devenv` (Python/AI — declarative services and language modules):
 

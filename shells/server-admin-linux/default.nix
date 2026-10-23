@@ -14,6 +14,9 @@ pkgs.mkShell {
   buildInputs =
     with pkgs;
     [
+      # === VNC client (iDRAC Enterprise / iLO Advanced) ===
+      tigervnc # vncviewer
+
       # === Block storage / disk (Linux kernel interfaces) ===
       nvme-cli # NVMe inspection, firmware, format, secure erase
       hdparm # HDD/SSD params, secure erase, USB-stick prep
@@ -35,7 +38,7 @@ pkgs.mkShell {
       echo "═══════════════════════════════════════════════════════════════"
       echo ""
       echo "Includes all tools from server-admin plus Linux-only:"
-      echo "  nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp"
+      echo "  tigervnc, nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp"
       echo ""
       echo "BMC / IPMI:"
       echo "  ipmitool -I lanplus -H <idrac_ip> -U root -P <pw> chassis status"
