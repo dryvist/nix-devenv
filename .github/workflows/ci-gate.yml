@@ -9,6 +9,9 @@ name: CI Gate
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  # Push runs save the Nix store cache that pull requests restore.
+  push:
+    branches: [develop]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -35,6 +38,9 @@ jobs:
       profile: nix
       osv_scan: true
       nix_validate: true
+      # nix flake check builds in parallel; the s3-cache extra backs the cache step.
+      # volume=80gb: the default root volume fills while the check closures build.
+      nix_validate_runner_label: runs-on=${{ github.run_id }}/cpu=8/ram=32/family=m7+c7/extras=s3-cache/volume=80gb
       nix_validate_timeout_minutes: 45
       filters: |
         nix:
