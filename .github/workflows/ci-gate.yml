@@ -36,6 +36,7 @@ jobs:
     uses: JacobPEvans/.github/.github/workflows/_ci-gate.yml@v1
     with:
       profile: nix
+      flake_lock_max_age_days: 30
       osv_scan: true
       nix_validate: true
       # Develop pushes check the runner's system only; pull requests already do.
