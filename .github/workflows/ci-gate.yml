@@ -38,6 +38,8 @@ jobs:
       profile: nix
       osv_scan: true
       nix_validate: true
+      # Develop pushes check the runner's system only; pull requests already do.
+      all_systems: false
       # nix flake check builds in parallel; the s3-cache extra backs the cache step.
       # volume=80gb: the default root volume fills while the check closures build.
       nix_validate_runner_label: runs-on=${{ github.run_id }}/cpu=8/ram=32/family=m7+c7/extras=s3-cache/volume=80gb
