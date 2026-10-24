@@ -1,8 +1,7 @@
 # CI Gate — thin wrapper over the dryvist org reusable workflow
 #
-# Delegates the standard checks to the org orchestrator
-# `JacobPEvans/.github/.github/workflows/_ci-gate.yml@v1`; its `Merge Gate`
-# summary job always reports, making it safe to require in rulesets.
+# Delegates the standard checks to the org orchestrator and locally aggregates
+# those results with the flake freshness check under the required gate context.
 
 name: CI Gate
 
@@ -22,9 +21,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  # Job id `gate` is the org-canonical caller shape: the required status
-  # check context is `gate / Merge Gate` on every consumer.
-  gate:
+  shared-gate:
     permissions:
       contents: read
       pull-requests: read
@@ -51,3 +48,25 @@ jobs:
         markdown:
           - '**.md'
           - '.markdownlint*'
+
+  flake-lock-fresh:
+    name: Flake Lock Fresh
+    permissions:
+      contents: read
+    uses: dryvist/.github/.github/workflows/_flake-lock-fresh.yml@cf39ed35622ae0c3398c0e8c8c1de7aa992f387b6
+    with:
+      max_age_days: 30
+
+  # Preserve the required check context while aggregating both gates.
+  gate:
+    name: gate / Merge Gate
+    needs: [shared-gate, flake-lock-fresh]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Aggregate results
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
