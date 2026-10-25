@@ -17,9 +17,6 @@ pkgs.mkShell {
       ipmitool # IPMI client + Serial-over-LAN (sol activate)
       freeipmi # ipmiconsole, bmc-config, ipmi-sel
 
-      # === VNC client (iDRAC Enterprise / iLO Advanced) ===
-      tigervnc # vncviewer
-
       # === Serial console ===
       picocom # lightweight serial terminal
       minicom # menu-driven classic

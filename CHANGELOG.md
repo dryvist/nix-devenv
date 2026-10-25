@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.2](https://github.com/dryvist/nix-devenv/compare/v0.25.1...v0.25.2) (2026-10-23)
+
+
+### Bug Fixes
+
+* move TigerVNC to Linux server-admin shell ([#259](https://github.com/dryvist/nix-devenv/issues/259)) ([11116f9](https://github.com/dryvist/nix-devenv/commit/11116f9217ea310969f03ae2f340edea9699908f))
+
 ## [0.25.1](https://github.com/dryvist/nix-devenv/compare/v0.25.0...v0.25.1) (2026-10-18)
 
 
