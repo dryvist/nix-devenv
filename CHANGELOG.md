@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.26.0](https://github.com/dryvist/nix-devenv/compare/v0.25.2...v0.26.0) (2026-10-27)
+
+
+### Features
+
+* add staged identifier scanning hook ([#261](https://github.com/dryvist/nix-devenv/issues/261)) ([f775050](https://github.com/dryvist/nix-devenv/commit/f775050be46f1f1932c64d69dc6e139ab794ff31))
+
 ## [0.25.2](https://github.com/dryvist/nix-devenv/compare/v0.25.1...v0.25.2) (2026-10-23)
 
 
