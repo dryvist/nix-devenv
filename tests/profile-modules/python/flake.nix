@@ -6,7 +6,7 @@
 # hook execution.)
 {
   inputs = {
-    channels.url = "path:../../../channels";
+    channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
     nixpkgs.follows = "channels/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-devenv.url = "path:../../..";

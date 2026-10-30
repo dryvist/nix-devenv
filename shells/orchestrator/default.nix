@@ -14,7 +14,7 @@ in
 {
   imports = [ ../../flake-modules/devenv-task-runner.nix ];
 
-  devenv.root = if pwdIsOrchestratorRoot then pwd else builtins.toString ./.;
+  devenv.root = if pwdIsOrchestratorRoot then pwd else "${./.}";
 
   # System libraries required by Python packages (qwen-agent needs libsndfile)
   packages = [ pkgs.libsndfile ];

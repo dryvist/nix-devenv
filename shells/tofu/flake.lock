@@ -6,14 +6,21 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "path": "../../channels",
-        "type": "path"
+        "dir": "channels",
+        "lastModified": 1793062540,
+        "narHash": "sha256-NKCD2NahC+d/ALYcM9iF5I2VnoubtzZatpK4O31VctQ=",
+        "owner": "dryvist",
+        "repo": "nix-devenv",
+        "rev": "4d7260075b12a24c0d17ccfe6361b5d15cf94410",
+        "type": "github"
       },
       "original": {
-        "path": "../../channels",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "channels",
+        "owner": "dryvist",
+        "ref": "v0",
+        "repo": "nix-devenv",
+        "type": "github"
+      }
     },
     "flake-utils": {
       "inputs": {

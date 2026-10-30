@@ -3,11 +3,10 @@
   # repo. nix forbids referencing a variable in `inputs` (input URLs must be
   # string literals), so the "define once, inherit everywhere" pattern is this
   # tiny pin flake: each shells/<name>/flake.nix declares
-  #   channels.url = "path:../../channels";
+  #   channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
   #   nixpkgs.follows = "channels/nixpkgs";
   # and the root flake follows it too. Bumping the channel is a one-line edit
-  # here plus lockfile-only relocks in the followers (Renovate-able) — no more
-  # editing the same string in 13+ files.
+  # here, publication, and lockfile-only relocks in the followers (Renovate-able).
   description = "Single source of truth for the nixpkgs channel in nix-devenv.";
 
   # Channel branch = the intended major-version pin. Renovate owns lockfile

@@ -66,6 +66,12 @@ pkgs.mkShell {
     ++ extraPackages;
 
   shellHook = ''
+    # OrbStack exposes its Docker socket under the user's home, not /var/run;
+    # point the Docker SDK (molecule) at it when present and nothing is set.
+    if [ -z "''${DOCKER_HOST:-}" ] && [ -S "$HOME/.orbstack/run/docker.sock" ]; then
+      export DOCKER_HOST="unix://$HOME/.orbstack/run/docker.sock"
+    fi
+
     if [ -z "''${DIRENV_IN_ENVRC:-}" ]; then
       echo "═══════════════════════════════════════════════════════════════"
       echo "Ansible Configuration Management Environment"
@@ -77,7 +83,7 @@ pkgs.mkShell {
       echo "  - molecule: $(molecule --version 2>/dev/null)"
       echo ""
       echo "Secrets Management:"
-      echo "  - sops: $(sops --version 2>/dev/null)"
+      echo "  - sops: $(sops --version --check-for-updates 2>/dev/null)"
       echo "  - age: $(age --version 2>/dev/null)"
       echo ""
       echo "Getting Started:"
