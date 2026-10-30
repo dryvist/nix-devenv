@@ -3,7 +3,7 @@
 
   inputs = {
     # Channel pinned once in ./channels; see channels/flake.nix.
-    channels.url = "path:./channels";
+    channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
     nixpkgs.follows = "channels/nixpkgs";
     # Per-package escape hatch; see channels/flake.nix. Consumed only where a
     # shell needs a package the stable channel cannot yet supply.

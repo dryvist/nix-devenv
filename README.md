@@ -137,6 +137,10 @@ consumer resolves a ~2-node lock while a `devenv` consumer resolves the full
 shell, each with an isolated lock** — importers that only want a lightweight
 shell never inherit the `devenv` dependency tree.
 
+The root flake, shell flakes, and profile fixtures follow the published
+`channels` subflake. Its [flake.nix](channels/flake.nix) owns the channel
+definitions; each consuming flake independently locks the published input.
+
 ## Credentials in a dev shell
 
 Shells here ship tooling, never credentials. The contract is the same in every

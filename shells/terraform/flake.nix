@@ -6,8 +6,8 @@
   description = "DEPRECATED alias of shells/tofu — OpenTofu development environment";
 
   inputs = {
-    # Channel pinned once in ../../channels; see channels/flake.nix.
-    channels.url = "path:../../channels";
+    # Channel pinned once in channels/flake.nix; see channels/flake.nix.
+    channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
     nixpkgs.follows = "channels/nixpkgs";
   };
 
