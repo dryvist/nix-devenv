@@ -140,15 +140,6 @@
               }))
             ];
           };
-          # pkgsUnstable must be passed here too. It defaults to `pkgs`, so
-          # omitting it does not fail — it silently hands out the stable
-          # opentofu, and `nix develop .#tofu` would then disagree with
-          # `nix develop ?dir=shells/tofu` about the version.
-          tofu = import ./shells/tofu/default.nix {
-            pkgs = pkgsUnfree;
-            pkgsUnstable = pkgsUnstableUnfree;
-            extraPackages = [ flowLock ];
-          };
           kubernetes = import ./shells/kubernetes/default.nix { inherit pkgs; };
           containers = import ./shells/containers/default.nix { inherit pkgs; };
           typescript = import ./shells/typescript/default.nix { inherit pkgs; };
@@ -159,6 +150,16 @@
           windows = import ./shells/windows/default.nix { inherit pkgs; };
           server-admin = import ./shells/server-admin/default.nix { inherit pkgs; };
 
+        }
+        // nixpkgs.lib.optionalAttrs (builtins.elem system nixpkgs-unstable.lib.systems.flakeExposed) {
+          # Keep the root and isolated shell on the same OpenTofu version.
+          tofu = import ./shells/tofu/default.nix {
+            pkgs = pkgsUnfree;
+            pkgsUnstable = pkgsUnstableUnfree;
+            extraPackages = [ flowLock ];
+          };
+        }
+        // nixpkgs.lib.optionalAttrs (builtins.hasAttr system devenv.packages) {
           # devenv shells (Python/AI development)
           ai-dev = devenv.lib.mkShell {
             inherit inputs pkgs;

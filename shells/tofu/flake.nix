@@ -21,7 +21,7 @@
       ...
     }:
     let
-      systems = [
+      systems = builtins.filter (system: builtins.elem system nixpkgs-unstable.lib.systems.flakeExposed) [
         "aarch64-darwin"
         "x86_64-darwin"
         "x86_64-linux"

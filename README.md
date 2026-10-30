@@ -107,6 +107,9 @@ outputs = { nix-devenv, nixpkgs, ... }: {
 | `orchestrator` | LangGraph orchestration (uv + pyproject.toml) |
 | `mlx-server` | MLX inference (aarch64-darwin only, uv) |
 
+`tofu`, `ai-dev`, and `orchestrator` support Linux on x86_64 and aarch64 and
+macOS on aarch64, following their upstream dependencies' platform support.
+
 ### Reusable modules
 
 | Module | Description |

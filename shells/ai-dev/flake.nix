@@ -14,7 +14,7 @@
   outputs =
     { nixpkgs, devenv, ... }@inputs:
     let
-      systems = [
+      systems = builtins.filter (system: builtins.hasAttr system devenv.packages) [
         "aarch64-darwin"
         "x86_64-darwin"
         "x86_64-linux"
