@@ -83,7 +83,7 @@ pkgs.mkShell {
       echo "  - molecule: $(molecule --version 2>/dev/null)"
       echo ""
       echo "Secrets Management:"
-      echo "  - sops: $(sops --version 2>/dev/null)"
+      echo "  - sops: $(sops --version --check-for-updates 2>/dev/null)"
       echo "  - age: $(age --version 2>/dev/null)"
       echo ""
       echo "Getting Started:"

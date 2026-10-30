@@ -1,12 +1,5 @@
 # Changelog
 
-## [0.26.1](https://github.com/dryvist/nix-devenv/compare/v0.26.0...v0.26.1) (2026-10-29)
-
-
-### Bug Fixes
-
-* **shells:** export DOCKER_HOST for OrbStack in the ansible shell ([#272](https://github.com/dryvist/nix-devenv/issues/272)) ([385ad29](https://github.com/dryvist/nix-devenv/commit/385ad29799de791410bc17e428088b57c3467f8b))
-
 ## [0.26.0](https://github.com/dryvist/nix-devenv/compare/v0.25.2...v0.26.0) (2026-10-27)
 
 

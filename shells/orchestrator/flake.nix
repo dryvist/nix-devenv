@@ -2,8 +2,8 @@
   description = "Skill orchestration: LangGraph, LlamaIndex, embeddings";
 
   inputs = {
-    # Channel pinned once in ../../channels; see channels/flake.nix.
-    channels.url = "path:../../channels";
+    # Channel pinned once in channels/flake.nix; see channels/flake.nix.
+    channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
     nixpkgs.follows = "channels/nixpkgs";
     devenv = {
       url = "github:cachix/devenv";
@@ -14,7 +14,7 @@
   outputs =
     { nixpkgs, devenv, ... }@inputs:
     let
-      systems = [
+      systems = builtins.filter (system: builtins.hasAttr system devenv.packages) [
         "aarch64-darwin"
         "x86_64-darwin"
         "x86_64-linux"

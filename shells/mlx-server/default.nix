@@ -8,7 +8,7 @@ let
   pwdIsMlxRoot = pwd != "" && builtins.pathExists (pwd + "/pyproject.toml");
 in
 {
-  devenv.root = if pwdIsMlxRoot then pwd else builtins.toString ./.;
+  devenv.root = if pwdIsMlxRoot then pwd else "${./.}";
 
   languages.python = {
     enable = true;
