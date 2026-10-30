@@ -1,8 +1,8 @@
 # nix-devenv
 
-Centralized, reusable development shells for the Nix ecosystem — pick a
-pre-built environment (Terraform, Ansible, Kubernetes, Python/AI, …) or scaffold
-your own, without pulling a heavy dependency tree into your project's lock.
+Reusable Nix development shells for Terraform, Ansible, Kubernetes, Python/AI,
+and more. This repo owns shell definitions and keeps the larger `devenv`
+dependency tree out of lightweight shell locks.
 
 [![OSV Scan][osv-badge]][osv-url]
 [![Release Please][release-badge]][release-url]
@@ -12,219 +12,50 @@ your own, without pulling a heavy dependency tree into your project's lock.
 [release-badge]: https://github.com/dryvist/nix-devenv/actions/workflows/release-please.yml/badge.svg
 [release-url]: https://github.com/dryvist/nix-devenv/actions/workflows/release-please.yml
 
-This repo owns reusable dev-shell definitions and isolates the heavy transitive
-dependency tree of `devenv` (~26 nodes: crate2nix, cachix, git-hooks, …) behind
-per-shell locks, so a consumer that only needs a lightweight `mkShell` never
-pays for it.
+## Quick start
 
-## Installation
-
-Prerequisites:
-
-- [Nix](https://nixos.org/) with flakes enabled (the Determinate Nix installer
-  turns them on by default).
-- Optional: [`direnv`](https://direnv.net/) for automatic per-project activation.
-
-No install step of its own — consume a shell directly by flake reference:
+Use Nix with flakes enabled. `direnv` is optional.
 
 ```bash
-# Enter the Terraform shell with its own minimal lock (~2 nodes: just nixpkgs)
-nix develop "github:dryvist/nix-devenv?dir=shells/tofu&ref=vN"
+nix develop "github:dryvist/nix-devenv?dir=shells/ansible&ref=v0"
 ```
 
-The `?dir=<shell>` selector resolves against **that shell's** `flake.lock`, so
-`mkShell` consumers never inherit the `devenv` tree.
+This opens the Ansible shell using its isolated lock file. See the
+[consumer guide](docs/using-shells.md) to choose a shell, compose a shell into
+your own flake, or see the supported tools and platforms.
 
-## Usage
+## Other entry points
 
-### Consume a shell
+For a one-off shell using the larger root lock:
 
 ```bash
-# A: Direct use with an isolated lock (preferred)
-nix develop "github:dryvist/nix-devenv?dir=shells/tofu&ref=vN"
-
-# B: In a project whose flake.nix pins nix-devenv (Pattern D), .envrc loads that local flake
-echo 'use flake .' \
-  > .envrc
-
-# C: Root flake (convenience) — larger root lock, fine for one-offs
-nix develop "github:dryvist/nix-devenv?ref=vN#tofu"
-
-# E: Scaffold a new repo's dev environment from a template
-nix flake init -t "github:dryvist/nix-devenv?ref=vN#mkshell"    # lightweight mkShell
-nix flake init -t "github:dryvist/nix-devenv?ref=vN#devenv"     # full devenv
-nix flake init -t "github:dryvist/nix-devenv?ref=vN#with-hooks" # dev shell with pre-commit hooks
+nix develop "github:dryvist/nix-devenv?ref=v0#ansible"
 ```
 
-### Compose modules into your own shell (Pattern D)
-
-Importing this repo as a flake input adds its tree to **your** lock — only repos
-that choose to import pay for it:
-
-```nix
-inputs.nix-devenv.url = "github:dryvist/nix-devenv?ref=vN";
-inputs.nix-devenv.inputs.nixpkgs.follows = "nixpkgs";
-
-outputs = { nix-devenv, nixpkgs, ... }: {
-  devShells.x86_64-linux.default =
-    let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in
-    nix-devenv.lib.mkEnv {
-      inherit pkgs;
-      modules = [
-        nix-devenv.devenvModules.python-ai
-        { packages = [ pkgs.jq ]; }
-      ];
-    };
-};
-```
-
-### Available shells
-
-`mkShell` (infrastructure — package lists, minimal lock):
-
-| Shell | Tooling |
-| --- | --- |
-| `ansible` | ansible, ansible-lint, molecule, sops, age |
-| `tofu` | terraform, opentofu, tflint, tfsec, trivy; local checks for Terrakube workspaces |
-| `kubernetes` | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
-| `containers` | docker, buildkit, crane, skopeo |
-| `typescript` | nodejs 22 LTS, pnpm, typescript, ts-language-server, biome |
-| `splunk-dev` | Python 3.9 via uv (EOL exception) |
-| `aws` | awscli2, aws-vault |
-| `azure` | azure-cli |
-| `database` | psql (PostgreSQL client) |
-| `windows` | powershell (pwsh 7) for Windows automation and `.ps1` |
-| `server-admin` | IPMI/SoL, serial, PXE, ISO/firmware, net + disk diag |
-| `server-admin-linux` | extends `server-admin`; adds VNC, nvme-cli, ethtool, tftp |
-
-`devenv` (Python/AI — declarative services and language modules):
-
-| Shell | Tooling |
-| --- | --- |
-| `ai-dev` | LangChain, LangGraph, OpenTelemetry (pip venv) |
-| `orchestrator` | LangGraph orchestration (uv + pyproject.toml) |
-| `mlx-server` | MLX inference (aarch64-darwin only, uv) |
-
-`tofu`, `ai-dev`, and `orchestrator` support Linux on x86_64 and aarch64 and
-macOS on aarch64, following their upstream dependencies' platform support.
-
-### Reusable modules
-
-| Module | Description |
-| --- | --- |
-| `devenvModules.python-ai` | Python + LangChain + OTel (venv) |
-| `devenvModules.python-ml` | Python + uv sync |
-
-## Architecture
-
-### mkShell vs devenv
-
-| Use `mkShell` when | Use `devenv` when |
-| --- | --- |
-| The shell is just a package list | You need declarative services |
-| It runs in CI where deps must be minimal | You need language tooling (uv) |
-| No background processes | You need process management |
-| Infrastructure / CLI tooling | A full-stack app or AI/ML project |
-
-Rule: infrastructure shells stay `mkShell`. Convert to `devenv` only when you
-actually need services, processes, or language modules.
-
-### Per-shell lock isolation
-
-Each shell carries its own `flake.nix` and `flake.lock` under its subdirectory.
-Consumers select a shell's lock with Nix's `?dir=` parameter, so a `mkShell`
-consumer resolves a ~2-node lock while a `devenv` consumer resolves the full
-~28-node tree. The contract this repo exposes is stable: **a flake reference per
-shell, each with an isolated lock** — importers that only want a lightweight
-shell never inherit the `devenv` dependency tree.
-
-The root flake, shell flakes, and profile fixtures follow the published
-`channels` subflake. Its [flake.nix](channels/flake.nix) owns the channel
-definitions; each consuming flake independently locks the published input.
-
-## Credentials in a dev shell
-
-Shells here ship tooling, never credentials. The contract is the same in every
-consuming repo, and it is deliberately dynamic — nothing long-lived is stored
-on disk or baked into a shell.
-
-**Never export a secret from `.envrc`.** direnv caches its resolved environment
-to disk, so anything minted at `.envrc` load time is persisted there. Mint at
-call time instead, in the shell that needs it.
-
-The three patterns, in order of preference:
-
-1. **Let the tool resolve it itself.** `git` needs no token — a credential
-   helper answers each request with a freshly minted, short-lived credential.
-   `aws` does the same through `credential_process`. Nothing to wire per shell.
-2. **Non-secret coordinates resolved in the `shellHook`.** See
-   `shells/tofu/default.nix`: it takes `TF_CLOUD_HOSTNAME` /
-   `TF_CLOUD_ORGANIZATION` from the environment, or runs `TF_CLOUD_ENV_CMD`
-   to print them. Those two are addresses, not credentials, so caching them
-   is not a leak. An empty result from the command aborts the shell.
-   `TERRAKUBE_ENV_OPTIONAL=1` skips the block, for offline `tofu validate`
-   only. A real secret still must not be exported here — direnv persists a
-   `shellHook`'s environment to the same on-disk cache as `.envrc`.
-3. **A helper function for tools that only read the environment.** `gh` reads
-   `GITHUB_TOKEN` and has no credential-helper hook, so the host shell provides
-   functions that mint a scoped token per call.
-
-Bootstrap credentials are read from the environment the shell inherits, so no
-shell definition here contains one.
-
-## Adding a shell
-
-1. Create `shells/<name>/default.nix` with the shell definition.
-2. Create `shells/<name>/flake.nix` — `mkShell` needs only `nixpkgs`; `devenv`
-   needs `nixpkgs` + `devenv`.
-3. Create `shells/<name>/.envrc` — `use flake` for `mkShell`,
-   `use flake --impure` for `devenv`.
-4. Add the shell to the root `flake.nix` `devShells` output.
-5. Generate the lock: `cd shells/<name> && nix flake lock`.
-6. Test: `cd shells/<name> && nix develop`.
-
-## Updating locks
+Scaffold a project from a template:
 
 ```bash
-# A single shell's lock
-cd shells/tofu && nix flake update
-
-# Root lock (affects root-flake consumers)
-nix flake update
-
-# Every shell lock
-for dir in shells/*/; do (cd "$dir" && nix flake update); done
+nix flake init -t "github:dryvist/nix-devenv?ref=v0#mkshell"
+nix flake init -t "github:dryvist/nix-devenv?ref=v0#devenv"
+nix flake init -t "github:dryvist/nix-devenv?ref=v0#with-hooks"
 ```
 
-## Validation
+## Scope
 
-```bash
-nix flake check    # validate the root flake
-nix fmt            # fix formatting (nixfmt-tree)
-```
+This repo owns reusable development shells and templates. It does not provide
+system or Home Manager modules. Lightweight `mkShell` environments have their
+own locks; Python/AI shells that need services or language modules use
+`devenv`.
 
-## Cachix binary cache
-
-`devenv` shells benefit from the Cachix binary cache. Add to your Nix config:
-
-```nix
-nix.settings = {
-  substituters = [ "https://devenv.cachix.org" ];
-  trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
-};
-```
+Shells provide tools, not credentials. Do not export secrets from `.envrc`;
+see the [consumer guide](docs/using-shells.md#credentials).
 
 ## Contributing
 
-Workspace conventions (commits, branches, signing, PRs) live at
+Shell authoring and validation steps are in [CLAUDE.md](CLAUDE.md). Workspace
+conventions for commits, branches, signing, and pull requests live at
 [docs.jacobpevans.com/conventions](https://docs.jacobpevans.com/conventions/overview).
 
 ## License
 
 MIT.
-
----
-
-> Part of a [larger ecosystem of ~40 repos](https://docs.jacobpevans.com) — see how it all fits together.

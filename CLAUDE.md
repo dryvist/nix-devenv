@@ -5,7 +5,7 @@ Centralized, reusable development environments for the Nix ecosystem.
 ## Purpose
 
 This repo owns ALL reusable development shell definitions. It isolates devenv's
-heavy transitive dependency tree (~26 nodes: crate2nix, cachix, git-hooks, etc.)
+larger transitive dependency tree
 from module-exporting repos (nix-ai, nix-home, nix-darwin).
 
 ## Architecture
@@ -19,17 +19,10 @@ from module-exporting repos (nix-ai, nix-home, nix-darwin).
 | nix-ai | AI coding tools | Never |
 | **nix-devenv** | Development shells | N/A (this repo) |
 
-**Core module repos NEVER import nix-devenv.** They use Pattern A or B (below)
-for zero lock impact.
+**Core module repos NEVER import nix-devenv.** They use Pattern A or B for zero
+lock impact; see the [consumer guide](docs/using-shells.md#consumer-patterns).
 
 ### mkShell vs devenv
-
-| Use mkShell when | Use devenv when |
-| ----------------- | ----------------- |
-| Shell is just a package list | Need declarative services (databases, queues) |
-| Used in CI where deps must be minimal | Need language-specific tooling (Python venvs, uv) |
-| No services or background processes | Need process management |
-| Infrastructure/CLI tooling repo | Full-stack app or AI/ML project |
 
 **Rule: Infrastructure shells stay mkShell.** Only convert to devenv when you
 actually need services, processes, or language modules.
@@ -37,116 +30,19 @@ actually need services, processes, or language modules.
 ### Per-Shell Lock Isolation
 
 Each shell has its own `flake.nix` and `flake.lock` in its subdirectory.
-Consumers select a specific shell's lock using Nix's `?dir=` parameter:
+Consumers select a specific shell's lock using Nix's `?dir=` parameter. This
+means mkShell consumers never pay for devenv's dependency tree.
 
-```bash
-# mkShell shell — ~2 node lock (just nixpkgs)
-nix develop github:dryvist/nix-devenv?dir=shells/tofu
-
-# devenv shell — ~28 node lock (nixpkgs + devenv tree)
-nix develop github:dryvist/nix-devenv?dir=shells/ai-dev
-```
-
-This means mkShell consumers never pay for devenv's dependency tree.
-
-## Consumer Patterns
-
-### Pattern A — Direct use with isolated lock (preferred)
-
-```bash
-nix develop github:dryvist/nix-devenv?dir=shells/tofu
-```
-
-Each shell resolves against its OWN flake.lock. No bloat leakage.
-
-### Pattern B — .envrc in a project repo
-
-```bash
-# .envrc
-use flake github:dryvist/nix-devenv?dir=shells/orchestrator --impure
-```
-
-direnv activates the remote shell with its own lock. No local flake.nix needed.
-
-### Pattern C — Root flake (convenience)
-
-```bash
-nix develop github:dryvist/nix-devenv#tofu
-```
-
-Uses the root flake.lock (larger — carries devenv). Fine for quick one-off use.
-
-### Pattern D — Local flake.nix with composition
-
-```nix
-inputs.nix-devenv.url = "github:dryvist/nix-devenv?ref=v<major>";
-inputs.nix-devenv.inputs.nixpkgs.follows = "nixpkgs";
-
-outputs = { nix-devenv, nixpkgs, ... }: {
-  devShells.default = nix-devenv.lib.mkEnv {
-    pkgs = nixpkgs.legacyPackages.${system};
-    modules = [
-      nix-devenv.devenvModules.python-ai
-      { packages = [ pkgs.jq ]; }
-    ];
-  };
-};
-```
-
-Consumer's flake.lock gains nix-devenv's tree — only repos that CHOOSE to import pay.
-
-### Pattern E — Template scaffolding
-
-```bash
-nix flake init -t github:dryvist/nix-devenv#devenv
-nix flake init -t github:dryvist/nix-devenv#mkshell
-```
-
-## Available Shells
-
-### mkShell (infrastructure)
-
-| Shell | Description |
-| ------- | ------------- |
-| ansible | Ansible, ansible-lint, molecule, sops, age |
-| tofu | Terraform, OpenTofu, tflint, tfsec, trivy; local checks for Terrakube workspaces (composes aws shell) |
-| kubernetes | kubectl, helm, helmfile, kustomize, k9s, kubeconform, kind |
-| containers | docker, buildkit, crane, skopeo |
-| typescript | nodejs 22 LTS, pnpm, typescript, typescript-language-server, biome (formatter/linter/LSP) |
-| splunk-dev | Python 3.9 via uv (EOL exception) |
-| aws | awscli2, aws-vault |
-| azure | azure-cli |
-| database | psql (PostgreSQL client) |
-| windows | powershell (pwsh) — cross-platform PowerShell 7 for Windows automation and .ps1 scripting |
-| server-admin | out-of-band + bare-metal admin (IPMI/SoL, serial, PXE, ISO, net-diag, SMART) — packages below |
-| server-admin-linux | extends server-admin; adds nvme-cli, hdparm, sg3_utils, ethtool, tftp-hpa, atftp (Linux only) |
-
-`server-admin` packages: ipmitool, freeipmi; picocom, minicom, tio;
-dnsmasq; xorriso, cabextract; nmap, tcpdump, mtr, iperf3, wakeonlan;
-smartmontools; expect, sshpass.
-`server-admin-linux` adds tigervnc and Linux-only storage, NIC, and TFTP tools.
-
-### devenv (Python/AI)
-
-| Shell | Description |
-| ------- | ------------- |
-| ai-dev | LangChain, LangGraph, OpenTelemetry (pip venv) |
-| orchestrator | LangGraph orchestration (uv + pyproject.toml) |
-| mlx-server | MLX inference (aarch64-darwin only, uv) |
-
-## Reusable Modules
-
-| Module | Description |
-| ------ | ----------- |
-| `devenvModules.python-ai` | Python + LangChain + OTel (venv) |
-| `devenvModules.python-ml` | Python + uv sync |
+Consumer patterns, shell catalog, module exports, and Cachix setup are in the
+[consumer guide](docs/using-shells.md). The [README](README.md) has the quick
+start.
 
 ## How to Add a New Shell
 
 1. Create `shells/<name>/default.nix` with the shell definition
 2. Create `shells/<name>/flake.nix` — mkShell needs only nixpkgs; devenv needs nixpkgs + devenv
 3. Create `shells/<name>/.envrc` — `use flake` for mkShell, `use flake --impure` for devenv
-4. Add the shell to the root `flake.nix` devShells output
+4. Add the shell to `lib/dev-shells.nix`; the root flake exports that set
 5. Generate the lock: `cd shells/<name> && nix flake lock`
 6. Test: `cd shells/<name> && nix develop`
 
@@ -170,22 +66,7 @@ nix flake check    # Validates root flake
 nix fmt            # Fix formatting (nixfmt-tree)
 ```
 
-## Cachix Binary Cache
+## References
 
-devenv shells benefit from the Cachix binary cache. Add to your nix config:
-
-```nix
-nix.settings = {
-  substituters = [ "https://devenv.cachix.org" ];
-  trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
-};
-```
-
-## Part of the Nix Ecosystem
-
-| Repo | Purpose |
-| ------ | --------- |
-| [nix-darwin](https://github.com/dryvist/nix-darwin) | macOS system config |
-| [nix-home](https://github.com/dryvist/nix-home) | User dev environment |
-| [nix-ai](https://github.com/dryvist/nix-ai) | AI coding tools |
-| **nix-devenv** (this repo) | Development shells |
+See the [README](README.md) for project scope and the [consumer guide](docs/using-shells.md)
+for shell selection and composition.
