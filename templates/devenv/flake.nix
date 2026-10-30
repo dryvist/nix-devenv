@@ -47,10 +47,13 @@
                   if pwd != "" then pwd else builtins.toString ./.;
 
                 # Add your configuration here
-                packages = with pkgs; [
-                  jq
-                  pre-commit
-                ] ++ config.pre-commit.settings.enabledPackages;
+                packages =
+                  with pkgs;
+                  [
+                    jq
+                    pre-commit
+                  ]
+                  ++ config.pre-commit.settings.enabledPackages;
 
                 enterShell = ''
                   ${config.pre-commit.shellHook}
