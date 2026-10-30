@@ -10,7 +10,7 @@ in
 {
   imports = [ ../../flake-modules/devenv-task-runner.nix ];
 
-  devenv.root = if pwdIsFlakeRoot then pwd else builtins.toString ./.;
+  devenv.root = if pwdIsFlakeRoot then pwd else "${./.}";
 
   languages.python = {
     enable = true;

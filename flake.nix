@@ -179,7 +179,10 @@
         // nixpkgs.lib.optionalAttrs (system == "aarch64-darwin") {
           mlx-server = devenv.lib.mkShell {
             inherit inputs pkgs;
-            modules = [ ./shells/mlx-server/default.nix ];
+            modules = [
+              ./shells/mlx-server/default.nix
+              { devenv.root = pkgs.lib.mkForce (devenvRoot + "/shells/mlx-server"); }
+            ];
           };
         }
         // nixpkgs.lib.optionalAttrs (system == "x86_64-linux" || system == "aarch64-linux") {
