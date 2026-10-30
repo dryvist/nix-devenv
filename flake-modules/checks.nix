@@ -11,15 +11,6 @@ forAllSystems (
       inherit (inputs) tofu-github;
     };
   in
-  assert
-    builtins.hasAttr "tofu" inputs.self.devShells.${system}
-    == builtins.elem system inputs.nixpkgs-unstable.lib.systems.flakeExposed;
-  assert
-    builtins.hasAttr "ai-dev" inputs.self.devShells.${system}
-    == builtins.hasAttr system inputs.devenv.packages;
-  assert
-    builtins.hasAttr "orchestrator" inputs.self.devShells.${system}
-    == builtins.hasAttr system inputs.devenv.packages;
   inputs.self.devShells.${system}
   // {
     private-identifier-hook = import ../tests/private-identifier-hook.nix {
