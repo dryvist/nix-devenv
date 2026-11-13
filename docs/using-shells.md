@@ -78,6 +78,7 @@ nix flake init -t "github:dryvist/nix-devenv?ref=vN#with-hooks"
 | `mkShell` | `aws` | AWS CLI, aws-vault |
 | `mkShell` | `azure` | Azure CLI |
 | `mkShell` | `database` | PostgreSQL client (`psql`) |
+| `mkShell` | `diagrams` | D2, draw.io (CLI export), Python 3 |
 | `mkShell` | `windows` | PowerShell 7 for Windows automation |
 | `mkShell` | `server-admin` | IPMI/SoL, serial, PXE, ISO/firmware, network and disk diagnostics |
 | `mkShell` | `server-admin-linux` | `server-admin` plus VNC, NVMe, NIC, and TFTP tools |
