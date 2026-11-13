@@ -35,6 +35,7 @@
             assert builtins.head hook.args == "git";
             assert builtins.elem "--pre-commit" hook.args;
             assert builtins.elem "--staged" hook.args;
+            assert builtins.elem "--redact" hook.args;
             pkgs.runCommand "gitleaks-contract" { } "touch $out";
         };
     };
