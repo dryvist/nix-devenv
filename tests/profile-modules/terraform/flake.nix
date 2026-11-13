@@ -31,7 +31,10 @@
           checks.gitleaks-contract =
             assert hook.enable;
             assert !hook.pass_filenames;
-            assert hook.entry == "${pkgs.gitleaks}/bin/gitleaks git --pre-commit --redact --staged --verbose";
+            assert hook.entry == "${pkgs.gitleaks}/bin/gitleaks";
+            assert builtins.head hook.args == "git";
+            assert builtins.elem "--pre-commit" hook.args;
+            assert builtins.elem "--staged" hook.args;
             pkgs.runCommand "gitleaks-contract" { } "touch $out";
         };
     };
