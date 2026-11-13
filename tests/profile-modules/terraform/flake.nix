@@ -1,7 +1,8 @@
 # Smoke-test consumer for nix-devenv's flakeModules.terraform profile.
 # Validation: `cd tests/profile-modules/terraform && nix flake check`.
 # Catches drift in git-hooks.nix hook names (terraform-format,
-# terraform-validate, tflint) before any consumer repo migrates.
+# terraform-validate, tflint) and the shared gitleaks hook before any
+# consumer repo migrates.
 {
   inputs = {
     channels.url = "github:dryvist/nix-devenv?ref=v0&dir=channels";
@@ -20,5 +21,18 @@
         "aarch64-linux"
       ];
       imports = [ nix-devenv.flakeModules.terraform ];
+
+      perSystem =
+        { config, pkgs, ... }:
+        let
+          hook = config.pre-commit.settings.hooks.gitleaks;
+        in
+        {
+          checks.gitleaks-contract =
+            assert hook.enable;
+            assert !hook.pass_filenames;
+            assert hook.entry == "${pkgs.gitleaks}/bin/gitleaks git --pre-commit --redact --staged --verbose";
+            pkgs.runCommand "gitleaks-contract" { } "touch $out";
+        };
     };
 }
