@@ -1,0 +1,4 @@
+# Fixture: a consumer-local markdownlint config. Its presence must keep the
+# markdownlint-cli2 hook from falling back to the org config.
+config:
+  MD013: false

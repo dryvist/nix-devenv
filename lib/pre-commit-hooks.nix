@@ -48,19 +48,9 @@ in
   # Secret detection
   detect-private-keys.enable = true;
 
-  # git-hooks.nix has no built-in gitleaks hook, so configure it as a
-  # custom hook mirroring upstream gitleaks' `gitleaks-system` hook:
-  # scan staged changes only, with findings redacted in the log output.
-  gitleaks = {
-    enable = true;
-    name = "gitleaks";
-    entry = "${pkgs.gitleaks}/bin/gitleaks git --pre-commit --redact --staged --verbose";
-    # The entry carries every argument. Without this, the hook module's own
-    # default arguments are appended and gitleaks reads the second `git` as a path.
-    args = [ ];
-    language = "system";
-    pass_filenames = false;
-  };
+  # Staged-change secret scan; the built-in hook's args are gitleaks' own
+  # pre-commit form (git --pre-commit --redact --staged --verbose).
+  gitleaks.enable = true;
 
   # This workstation-only list is installed from its private host config.
   # Public contributors without it get one warning and continue.

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.29.0](https://github.com/dryvist/nix-devenv/compare/v0.28.0...v0.29.0) (2026-11-13)
+
+
+### Features
+
+* **agent:** zcode run j-5f33f25f86f91a6c ([089253e](https://github.com/dryvist/nix-devenv/commit/089253ea6a75830d8db4e428602874ec12e04f80))
+* **hooks:** lint markdown with the org config when a repo has none ([#287](https://github.com/dryvist/nix-devenv/issues/287)) ([089253e](https://github.com/dryvist/nix-devenv/commit/089253ea6a75830d8db4e428602874ec12e04f80))
+
 ## [0.28.0](https://github.com/dryvist/nix-devenv/compare/v0.27.0...v0.28.0) (2026-11-13)
 
 

@@ -30,6 +30,7 @@
         { config, pkgs, ... }:
         let
           hook = config.pre-commit.settings.hooks.conventional-commit-subject;
+          markdownlintHook = config.pre-commit.settings.hooks.markdownlint-cli2;
           pattern = pkgs.lib.removeSuffix "\n" (
             pkgs.lib.fileContents "${tofu-github}/config/commit-message-pattern.txt"
           );
@@ -50,6 +51,16 @@
             # git-hooks.nix installs one git hook per stage that an enabled hook uses.
             assert builtins.elem "commit-msg" config.pre-commit.settings.installStages;
             pkgs.runCommand "conventional-commit-subject-contract" { } "touch $out";
+
+          # This consumer ships no markdownlint config, so the hook must lint
+          # with the org config from JacobPEvans/.github instead of the tool
+          # defaults.
+          checks.markdownlint-cli2-org-config-contract =
+            assert markdownlintHook.enable;
+            assert builtins.length markdownlintHook.args == 2;
+            assert builtins.head markdownlintHook.args == "--config";
+            assert pkgs.lib.hasSuffix "/.markdownlint-cli2.yaml" (builtins.elemAt markdownlintHook.args 1);
+            pkgs.runCommand "markdownlint-cli2-org-config-contract" { } "touch $out";
         };
     };
 }
