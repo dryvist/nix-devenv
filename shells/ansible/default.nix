@@ -93,16 +93,19 @@ pkgs.mkShell {
       echo ""
     fi
 
-    # Keep Galaxy's default install target inside this checkout so separate
-    # repositories and worktrees cannot overwrite one another's collections.
+    # Galaxy installs into the first entry, so put this checkout's folder first
+    # and keep the configured search paths (ansible.cfg or defaults) after it.
     # Set it after the banner probes, which initialize configured collection paths.
     if [ -z "''${ANSIBLE_COLLECTIONS_PATH:-}" ]; then
-      if _ansible_project_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
-        export ANSIBLE_COLLECTIONS_PATH="$_ansible_project_root/.ansible/collections"
-      else
-        export ANSIBLE_COLLECTIONS_PATH="$PWD/.ansible/collections"
-      fi
-      unset _ansible_project_root
+      # An empty value would make ansible-config report the working directory.
+      unset ANSIBLE_COLLECTIONS_PATH
+      _ansible_project_root="$(git rev-parse --show-toplevel 2>/dev/null)" || _ansible_project_root="$PWD"
+      _ansible_configured_paths="$(
+        ansible-config dump --format json 2>/dev/null \
+          | jq -r '.[] | select(.name == "COLLECTIONS_PATHS") | .value | join(":")' 2>/dev/null
+      )"
+      export ANSIBLE_COLLECTIONS_PATH="$_ansible_project_root/.ansible/collections''${_ansible_configured_paths:+:$_ansible_configured_paths}"
+      unset _ansible_project_root _ansible_configured_paths
     fi
   '';
 }
