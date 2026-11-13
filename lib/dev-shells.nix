@@ -102,6 +102,11 @@ forAllSystems (
       pkgsUnstable = pkgsUnstableUnfree;
       extraPackages = [ flowLock ];
     };
+    # Keep the root and isolated shell on the same d2 and drawio versions.
+    diagrams = import ../shells/diagrams/default.nix {
+      inherit pkgs;
+      pkgsUnstable = nixpkgs-unstable.legacyPackages.${system};
+    };
   }
   // nixpkgs.lib.optionalAttrs (builtins.hasAttr system devenv.packages) {
     # devenv shells (Python/AI development)
