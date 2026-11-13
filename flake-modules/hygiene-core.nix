@@ -6,7 +6,9 @@
 #                     hygiene, nix lints, markdownlint-cli2, commit subjects)
 # * JacobPEvans/.github — zizmor's `unpinned-uses` trusted-publisher policy
 #                     pulled in as `--config`, so consumers don't ship
-#                     their own .github/zizmor.yml
+#                     their own .github/zizmor.yml; markdownlint-cli2 also
+#                     falls back to the org .markdownlint-cli2.yaml when
+#                     the consumer has no markdownlint config of its own
 #
 # Deliberately does NOT pull in treefmt-nix. Formatting is an opinion that
 # differs by repo type — prettier reformatting hand-authored Markdown/MDX
@@ -23,7 +25,30 @@
   dryvist-github,
   mkPreCommitHooks,
 }:
-{ ... }:
+{ self, ... }:
+let
+  # Root-level markdownlint config files that win over the org config. The
+  # list mirrors the fallback logic in JacobPEvans/.github's reusable
+  # workflow .github/workflows/_markdown-lint.yml, so local hooks and CI
+  # lint markdown with the same config.
+  markdownlintConfigFiles = [
+    ".markdownlint-cli2.jsonc"
+    ".markdownlint-cli2.yaml"
+    ".markdownlint-cli2.cjs"
+    ".markdownlint-cli2.mjs"
+    ".markdownlint.jsonc"
+    ".markdownlint.json"
+    ".markdownlint.yaml"
+    ".markdownlint.yml"
+    ".markdownlint.cjs"
+    ".markdownlint.mjs"
+  ];
+  # `self` is the consumer flake's source tree. Flake sources contain only
+  # git-tracked files, so an untracked config is invisible here.
+  hasMarkdownlintConfig = builtins.any (
+    file: builtins.pathExists (self + "/${file}")
+  ) markdownlintConfigFiles;
+in
 {
   imports = [
     git-hooks.flakeModule
@@ -53,6 +78,22 @@
               "${dryvist-github}/zizmor.yml"
             ];
           };
+
+          # Point at the org-wide markdownlint config only when the consumer
+          # ships no config of its own; a repo with one keeps using it. Same
+          # shallow-merge care as zizmor: setting `args` on the bare attrset
+          # would drop the hook's `enable` / `files` / `excludes`.
+          markdownlint-cli2 =
+            if hasMarkdownlintConfig then
+              hooks.markdownlint-cli2
+            else
+              hooks.markdownlint-cli2
+              // {
+                args = [
+                  "--config"
+                  "${dryvist-github}/.markdownlint-cli2.yaml"
+                ];
+              };
         };
     };
 }

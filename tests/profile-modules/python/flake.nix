@@ -22,5 +22,20 @@
         "aarch64-linux"
       ];
       imports = [ nix-devenv.flakeModules.python ];
+
+      perSystem =
+        { config, pkgs, ... }:
+        let
+          hook = config.pre-commit.settings.hooks.markdownlint-cli2;
+        in
+        {
+          # This consumer ships its own .markdownlint-cli2.yaml, so the hook
+          # must keep using it instead of the org config. With no fallback,
+          # the hook has no `args` attribute at all.
+          checks.markdownlint-cli2-local-config-contract =
+            assert hook.enable;
+            assert !builtins.elem "--config" (hook.args or [ ]);
+            pkgs.runCommand "markdownlint-cli2-local-config-contract" { } "touch $out";
+        };
     };
 }
