@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.0](https://github.com/dryvist/nix-devenv/compare/v0.29.0...v0.30.0) (2026-11-13)
+
+
+### Features
+
+* **ansible:** use a project-local collections path in the ansible shells ([#299](https://github.com/dryvist/nix-devenv/issues/299)) ([bb9565e](https://github.com/dryvist/nix-devenv/commit/bb9565e439bacc80bef1e337b53d8034a8952072))
+
 ## [0.29.0](https://github.com/dryvist/nix-devenv/compare/v0.28.0...v0.29.0) (2026-11-13)
 
 
