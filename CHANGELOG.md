@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.0](https://github.com/dryvist/nix-devenv/compare/v0.27.0...v0.28.0) (2026-11-13)
+
+
+### Features
+
+* **shells:** add diagrams shell with d2, drawio, and python ([#290](https://github.com/dryvist/nix-devenv/issues/290)) ([397ab73](https://github.com/dryvist/nix-devenv/commit/397ab73e245a010ede4127e114db6b39a513c4c9))
+
 ## [0.27.0](https://github.com/dryvist/nix-devenv/compare/v0.26.1...v0.27.0) (2026-11-13)
 
 
