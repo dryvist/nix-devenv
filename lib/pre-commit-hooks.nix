@@ -55,6 +55,9 @@ in
     enable = true;
     name = "gitleaks";
     entry = "${pkgs.gitleaks}/bin/gitleaks git --pre-commit --redact --staged --verbose";
+    # The entry carries every argument. Without this, the hook module's own
+    # default arguments are appended and gitleaks reads the second `git` as a path.
+    args = [ ];
     language = "system";
     pass_filenames = false;
   };
