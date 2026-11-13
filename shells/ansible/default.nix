@@ -92,5 +92,17 @@ pkgs.mkShell {
       echo "  3. Run playbook: ansible-playbook -i inventory/hosts.yml playbooks/site.yml"
       echo ""
     fi
+
+    # Keep Galaxy's default install target inside this checkout so separate
+    # repositories and worktrees cannot overwrite one another's collections.
+    # Set it after the banner probes, which initialize configured collection paths.
+    if [ -z "''${ANSIBLE_COLLECTIONS_PATH:-}" ]; then
+      if _ansible_project_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+        export ANSIBLE_COLLECTIONS_PATH="$_ansible_project_root/.ansible/collections"
+      else
+        export ANSIBLE_COLLECTIONS_PATH="$PWD/.ansible/collections"
+      fi
+      unset _ansible_project_root
+    fi
   '';
 }
