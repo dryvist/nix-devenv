@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.27.0](https://github.com/dryvist/nix-devenv/compare/v0.26.1...v0.27.0) (2026-11-13)
+
+
+### Features
+
+* **agent:** autonomous zcode run j-fff080f948a44631 ([#286](https://github.com/dryvist/nix-devenv/issues/286)) ([285b793](https://github.com/dryvist/nix-devenv/commit/285b79383a0c8dc98e0fe9ef313e36b38bf90802))
+* **agent:** zcode run j-fff080f948a44631 ([285b793](https://github.com/dryvist/nix-devenv/commit/285b79383a0c8dc98e0fe9ef313e36b38bf90802))
+
 ## [0.26.1](https://github.com/dryvist/nix-devenv/compare/v0.26.0...v0.26.1) (2026-10-30)
 
 
