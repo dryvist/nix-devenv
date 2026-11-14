@@ -7,11 +7,11 @@
       },
       "locked": {
         "dir": "channels",
-        "lastModified": 1794597295,
-        "narHash": "sha256-cDrX3JJrdCXGXp0fEnN7h9FxdycpFkz4VME0i02aeYw=",
+        "lastModified": 1794610692,
+        "narHash": "sha256-Q1CN27IJPs87tr3fPw1N9h/gaUGhC8qHaBT9Kwgp/Uk=",
         "owner": "dryvist",
         "repo": "nix-devenv",
-        "rev": "51ea3b7cda0bcaff0e5ab2f9bf0379508a05d408",
+        "rev": "dcc893e2cec5072e3d7eb0884f3279abb53f17b3",
         "type": "github"
       },
       "original": {
@@ -29,11 +29,11 @@
       },
       "locked": {
         "dir": "channels",
-        "lastModified": 1794597295,
-        "narHash": "sha256-cDrX3JJrdCXGXp0fEnN7h9FxdycpFkz4VME0i02aeYw=",
+        "lastModified": 1794610692,
+        "narHash": "sha256-Q1CN27IJPs87tr3fPw1N9h/gaUGhC8qHaBT9Kwgp/Uk=",
         "owner": "dryvist",
         "repo": "nix-devenv",
-        "rev": "51ea3b7cda0bcaff0e5ab2f9bf0379508a05d408",
+        "rev": "dcc893e2cec5072e3d7eb0884f3279abb53f17b3",
         "type": "github"
       },
       "original": {
