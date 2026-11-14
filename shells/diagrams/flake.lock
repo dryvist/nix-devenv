@@ -7,11 +7,11 @@
       },
       "locked": {
         "dir": "channels",
-        "lastModified": 1794586769,
-        "narHash": "sha256-cXLMIPvcKRhDd4mlajmQgVyhKn+8VYNT5JcpI2kiWpw=",
+        "lastModified": 1794597295,
+        "narHash": "sha256-cDrX3JJrdCXGXp0fEnN7h9FxdycpFkz4VME0i02aeYw=",
         "owner": "dryvist",
         "repo": "nix-devenv",
-        "rev": "a9bf5360a2bd7a9ae8e24f5fa7ddcdabef8944d7",
+        "rev": "51ea3b7cda0bcaff0e5ab2f9bf0379508a05d408",
         "type": "github"
       },
       "original": {
